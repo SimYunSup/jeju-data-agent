@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>제주 데이터 길잡이 — AI Agent 기획서</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+  :root { --main: #E8771A; --deep: #1F3A4D; --soft: #FFF4EA; --line: #E6E1DA; --muted: #5E6B73; --ok: #2E7D4F; }
+  * { box-sizing: border-box; }
+  body { font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; color: #1E2328; font-size: 9.8pt; line-height: 1.5; margin: 0; }
+  h1, h2, h3 { color: var(--deep); line-height: 1.3; margin: 0; }
+  h2 { font-size: 16pt; border-bottom: 3px solid var(--main); padding-bottom: 5px; margin: 0 0 10px; }
+  h2 .no { color: var(--main); margin-right: 8px; }
+  h3 { font-size: 11.5pt; margin: 12px 0 5px; break-after: avoid; }
+  table { break-inside: avoid; }
+  p { margin: 5px 0; }
+  section { page-break-before: always; }
+  .cover { height: 262mm; display: flex; flex-direction: column; justify-content: space-between; padding: 8mm 4mm; page-break-before: auto; }
+  .cover .tag { color: var(--main); font-weight: 700; letter-spacing: .5px; font-size: 11pt; }
+  .cover h1 { font-size: 34pt; margin-top: 10mm; }
+  .cover .sub { font-size: 14pt; color: var(--muted); margin-top: 4mm; }
+  .cover .pitch { background: var(--soft); border-left: 6px solid var(--main); padding: 14px 18px; font-size: 12pt; margin-top: 10mm; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10mm; }
+  .kpi { border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; }
+  .kpi b { display: block; font-size: 20pt; color: var(--main); }
+  .kpi span { font-size: 9pt; color: var(--muted); }
+  .meta { font-size: 10pt; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 8.9pt; }
+  table.scen td, table.scen th { padding: 4px 5px; font-size: 8.4pt; }
+  th, td { border: 1px solid var(--line); padding: 5px 7px; vertical-align: top; text-align: left; }
+  th { background: #F6F3EF; color: var(--deep); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; break-inside: avoid; }
+  .card h4 { margin: 0 0 4px; color: var(--main); font-size: 11pt; }
+  .note { font-size: 9pt; color: var(--muted); }
+  .callout { background: var(--soft); border-radius: 8px; padding: 10px 14px; margin: 10px 0; }
+  .shot { width: 100%; border: 1px solid var(--line); border-radius: 8px; }
+  figure { margin: 8px 0; break-inside: avoid; }
+  figcaption { font-size: 9pt; color: var(--muted); text-align: center; margin-top: 3px; }
+  ul { margin: 4px 0 4px 18px; padding: 0; }
+  li { margin: 2px 0; }
+  .ok { color: var(--ok); font-weight: 700; }
+  code { font-family: "D2Coding", "SFMono-Regular", Menlo, monospace; font-size: 9pt; background: #F3F1EE; padding: 0 3px; border-radius: 3px; }
+  .flow { width: 80%; display: block; margin: 0 auto; }
+  .tight table td, .tight table th { padding: 3px 6px; font-size: 8.4pt; }
+  .tight p { font-size: 9.4pt; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div>
+    <div class="tag">제주 AI·빅데이터 활용 AI Agent 개발 챌린지 · AI Agent 기획서</div>
+    <h1>🍊 제주 데이터 길잡이</h1>
+    <div class="sub">말로 물으면, 제주 데이터를 스스로 찾아 분석하고<br>근거와 함께 답하는 도민용 AI 분석 Agent</div>
+    <div class="pitch">
+      “요즘 깐마늘 도매가가 작년보다 올랐어?” “버스 이용객이 제일 많은 정류소는?”<br>
+      도민이 평소 말투로 물으면 Agent가 제주데이터허브 1,259종과 제주빅데이터센터 70종 목록에서 알맞은 데이터를 고르고,
+      불러와 계산한 뒤 차트와 쉬운 설명으로 답합니다. 답에 쓴 숫자는 계산 결과와 자동 대조하고,
+      분석 전 과정을 다시 실행 가능한 코드로 남깁니다.
+    </div>
+    <div class="kpis">
+      <div class="kpi"><b>1,329종</b><span>Agent가 검색하는<br>데이터허브·센터 목록</span></div>
+      <div class="kpi"><b>670여 종</b><span>키 없이 즉시 분석하는<br>FILE 데이터</span></div>
+      <div class="kpi"><b>{{SUCCESS}}</b><span>대표 질문 완주(실측)<br>1건은 데이터 한계 안내</span></div>
+      <div class="kpi"><b>{{VERIFIED}}</b><span>답변 수치 근거 확인율<br>(시나리오 실측)</span></div>
+    </div>
+    <img class="shot" style="margin-top:8mm; max-height:92mm; object-fit:cover; object-position:top" src="ui-answer.png" alt="실행 화면">
+  </div>
+  <div class="meta">
+    제출물: 기획서(본 문서) · 실행 소스 코드 · 실행환경/매뉴얼 · 데이터 활용 명세 · 결과 설명자료<br>
+    실행: 센터 PC(Windows)에서 <code>run.bat</code> 더블클릭 → 브라우저 화면 · 참가 형태: 개인(기획·개발·검증 1인)
+  </div>
+</div>
+
+<section>
+  <h2><span class="no">01</span>구현 목표</h2>
+  <h3>문제: 데이터는 많은데, 도민이 쓰기 어렵다</h3>
+  <div class="grid2">
+    <div class="card"><h4>찾기 어렵다</h4>제주데이터허브에는 1,259종이 있지만 이름이 행정 용어(‘입도객’, ‘품종별 일일 거래 통계’)로 되어 있어 도민 표현(‘관광객’, ‘마늘 값’)으로는 찾기 어렵습니다. 517종은 외부 링크라 바로 열리지도 않습니다.</div>
+    <div class="card"><h4>열어도 분석이 어렵다</h4>수백 MB CSV, 인코딩 혼재, 따옴표 없이 쉼표가 들어간 행(예: <code>제주국제공항(대정,화순,일주서로)</code>), API 요청 변수 등 엑셀만으로는 다루기 힘든 자료가 많습니다.</div>
+    <div class="card"><h4>AI 답변은 믿기 어렵다</h4>일반 챗봇은 데이터를 보지 않고 그럴듯한 숫자를 만들어 냅니다. 공공 데이터 서비스에서는 숫자 하나가 틀려도 신뢰를 잃습니다.</div>
+    <div class="card"><h4>센터 데이터는 센터에서만</h4>카드 이용·와이파이·버스 정류소별 이용 등 핵심 데이터는 반출이 제한되어, 센터 PC에서 바로 분석할 수 있는 도구가 필요합니다.</div>
+  </div>
+
+  <h3>분석 주제</h3>
+  <p><b>“도민의 생활·생업 질문을 제주 데이터로 답한다.”</b> 특정 주제 하나를 고정하지 않고, 농업(감귤·월동채소 생산, 농산물 도매가격), 교통(버스 정류소·노선 이용), 관광(입도객·관광지 유입), 상권(카드 소비), 생활(충전소·의료기관) 등 데이터허브 8개 분야 전반을 하나의 Agent로 다룹니다.</p>
+
+  <h3>AI를 활용한 데이터 분석 목표</h3>
+  <table>
+    <tr><th style="width:24%">목표</th><th>AI가 하는 일</th><th style="width:28%">측정 기준</th></tr>
+    <tr><td>데이터 탐색 자동화</td><td>질문을 검색어로 바꾸고, 결과가 부족하면 표현을 바꿔 재검색, 상세(열·기간·요청 변수)를 보고 질문에 맞는 데이터 선택</td><td>질문당 적합 데이터 적재 성공</td></tr>
+    <tr><td>분석 자동화</td><td>필터·집계·기간 묶기·증감률·비중·이동평균·결합을 계획하고 오류 메시지를 읽고 스스로 수정</td><td>도구 오류 후 자가 복구, 답변 완주율</td></tr>
+    <tr><td>결과 전달</td><td>핵심 답 → 근거 표 → 차트 → 해석 → 한계 → 후속 질문 순의 쉬운 설명</td><td>차트·한계·출처 포함 여부</td></tr>
+    <tr><td>신뢰성</td><td>숫자는 계산 결과에서만, 데이터 기간·출처·결측 명시, 추측 금지</td><td>답변 수치의 근거 대조 통과율</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="no">02</span>서비스 제안</h2>
+  <h3>데이터 활용 개요</h3>
+  <p>Agent는 제주데이터허브 공개 메타데이터로 만든 <b>통합 카탈로그(허브 1,259종 + 센터 70종)</b>를 먼저 검색합니다. 선택된 데이터는 형태에 따라 세 경로로 불러옵니다.</p>
+  <table>
+    <tr><th>형태</th><th>규모</th><th>불러오는 방법</th><th>필요한 것</th></tr>
+    <tr><td>FILE</td><td>670여 종</td><td>데이터 상세의 첨부 CSV/XLSX를 내려받아 캐시</td><td>없음(즉시)</td></tr>
+    <tr><td>API</td><td>93종</td><td>요청 변수를 Agent가 채우고 페이지 단위 수집</td><td>사용자 프로젝트 키</td></tr>
+    <tr><td>센터</td><td>70종</td><td>센터 PC 폴더(<code>CENTER_DATA_DIR</code>)의 파일 자동 연결</td><td>센터 방문</td></tr>
+    <tr><td>LINK</td><td>517종</td><td>자동 적재 불가 → 출처 링크로 안내</td><td>—</td></tr>
+  </table>
+
+  <h3>핵심 기능</h3>
+  <div class="grid2">
+    <div class="card"><h4>① 말로 묻는 데이터 검색</h4>한국어 2-gram 검색 + 도민 표현 동의어(관광객↔입도객, 가격↔시세). 형태소 분석기·GPU 없이 센터 PC에서 0.1초 안에 1,329종 검색.</div>
+    <div class="card"><h4>② 스스로 분석하는 Agent</h4>검색 → 상세 확인 → 적재 → 분석 → 차트 → 답변을 도구 호출로 자율 수행. 오류가 나면 열 이름·변수를 고쳐 재시도.</div>
+    <div class="card"><h4>③ 숫자 자동 검증·자기 수정</h4>답변 속 집계 숫자(수량·금액·비율, ‘228곳’ 같은 개수 포함)를 뽑아 계산 결과와 대조(반올림, ‘3.6만’, ‘5억 9,706만’, 백만원 단위 열 인식). 날짜·순위·질문에 나온 조건 숫자는 제외. 근거 없는 숫자가 있으면 Agent가 <b>한 번 스스로 다시 계산하거나 지우고</b>, 그래도 남으면 화면에 경고.</div>
+    <div class="card"><h4>④ 재현 가능한 결과</h4>답변마다 보고서·근거 표(CSV)·차트·출처 기록·<b>같은 결과를 다시 계산하는 파이썬 코드</b>를 ZIP으로 제공.</div>
+    <div class="card"><h4>⑤ 깨진 원본도 견고하게</h4>인코딩 자동 판별, 따옴표 없는 쉼표 행 복구, 날짜·숫자 자동 변환, 정류소ID 같은 코드 보존.</div>
+    <div class="card"><h4>⑥ 센터 데이터 연결</h4>반출 불가 데이터도 센터 PC 폴더에 두면 같은 화면에서 분석. 결과(집계)만 반출 절차로.</div>
+  </div>
+
+  <h3>편의성</h3>
+  <ul>
+    <li><b>설치 없이 더블클릭</b>: <code>run.bat</code>이 파이썬·라이브러리를 자동 설치하고 브라우저 화면을 엽니다.</li>
+    <li><b>예시 질문 버튼·진행 상황 표시</b>: “🔎 데이터 찾기 → 📥 불러오기 → 🧮 분석 → 📊 차트”가 실시간으로 보여 기다림이 불안하지 않습니다.</li>
+    <li><b>이어 묻기</b>: 같은 대화에서 “그중 상위 3곳만 월별로”처럼 이어 물으면 불러온 데이터를 재사용합니다.</li>
+    <li><b>AI 없이도 쓰는 데이터 찾아보기 탭</b>: 키가 없어도 목록 검색·미리보기가 됩니다.</li>
+  </ul>
+
+  <h3>분석 데이터 활용 방안</h3>
+  <table>
+    <tr><th>사용자</th><th>활용 장면</th></tr>
+    <tr><td>센터 방문 도민·학생</td><td>궁금한 생활 데이터를 질문 하나로 확인, 결과 ZIP으로 과제·보고서에 출처와 함께 활용</td></tr>
+    <tr><td>농가·소상공인</td><td>품종 전환·도매가격 추이, 관광지·상권 카드 소비 업종 등 의사결정 참고자료</td></tr>
+    <tr><td>센터 운영자</td><td>방문자 상담 보조, 데이터 분석 교육 실습 도구, 자주 묻는 질문 → 데이터 수요 파악</td></tr>
+    <tr><td>공무원·연구자</td><td>재현 코드(<code>analysis.py</code>)를 받아 정식 분석으로 확장</td></tr>
+  </table>
+</section>
+
+<section class="tight">
+  <h2><span class="no">03</span>Agent 개발 구성</h2>
+  <h3>Workflow</h3>
+  <svg class="flow" viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif" font-size="13">
+    <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1F3A4D"/></marker></defs>
+    <g fill="#FFF4EA" stroke="#E8771A" stroke-width="1.6">
+      <rect x="10" y="20" width="120" height="56" rx="10"/><rect x="160" y="20" width="130" height="56" rx="10"/>
+      <rect x="320" y="20" width="130" height="56" rx="10"/><rect x="480" y="20" width="130" height="56" rx="10"/>
+      <rect x="640" y="20" width="110" height="56" rx="10"/><rect x="780" y="20" width="110" height="56" rx="10"/>
+    </g>
+    <g fill="#1F3A4D" text-anchor="middle">
+      <text x="70" y="44" font-weight="700">도민 질문</text><text x="70" y="62" font-size="11">자연어</text>
+      <text x="225" y="44" font-weight="700">search_datasets</text><text x="225" y="62" font-size="11">1,329종 검색·재검색</text>
+      <text x="385" y="44" font-weight="700">inspect_dataset</text><text x="385" y="62" font-size="11">열·기간·요청 변수</text>
+      <text x="545" y="44" font-weight="700">load_dataset</text><text x="545" y="62" font-size="11">FILE·API·센터</text>
+      <text x="695" y="44" font-weight="700">analyze</text><text x="695" y="62" font-size="11">선언형 15종</text>
+      <text x="835" y="44" font-weight="700">make_chart</text><text x="835" y="62" font-size="11">추이·순위·비중</text>
+    </g>
+    <g stroke="#1F3A4D" stroke-width="1.6" marker-end="url(#a)">
+      <line x1="130" y1="48" x2="158" y2="48"/><line x1="290" y1="48" x2="318" y2="48"/><line x1="450" y1="48" x2="478" y2="48"/>
+      <line x1="610" y1="48" x2="638" y2="48"/><line x1="750" y1="48" x2="778" y2="48"/>
+    </g>
+    <path d="M695 76 C 695 110, 545 110, 545 78" fill="none" stroke="#E8771A" stroke-dasharray="5 4" stroke-width="1.4" marker-end="url(#a)"/>
+    <text x="620" y="118" text-anchor="middle" fill="#5E6B73" font-size="11">오류 메시지를 읽고 열·변수 수정 후 재시도</text>
+    <g fill="#EEF5F0" stroke="#2E7D4F" stroke-width="1.6">
+      <rect x="480" y="150" width="130" height="56" rx="10"/><rect x="640" y="150" width="110" height="56" rx="10"/><rect x="780" y="150" width="110" height="56" rx="10"/>
+    </g>
+    <g fill="#1F3A4D" text-anchor="middle">
+      <text x="545" y="174" font-weight="700">finish</text><text x="545" y="192" font-size="11">답변·한계·후속 질문</text>
+      <text x="695" y="174" font-weight="700">수치 검증</text><text x="695" y="192" font-size="11">답변 숫자 ↔ 결과 표</text>
+      <text x="835" y="174" font-weight="700">결과 ZIP</text><text x="835" y="192" font-size="11">보고서·CSV·코드</text>
+    </g>
+    <g stroke="#1F3A4D" stroke-width="1.6" marker-end="url(#a)">
+      <line x1="835" y1="76" x2="560" y2="148"/><line x1="610" y1="178" x2="638" y2="178"/><line x1="750" y1="178" x2="778" y2="178"/>
+    </g>
+  </svg>
+
+  <h3>참여자 역할·목표</h3>
+  <table>
+    <tr><th style="width:22%">역할</th><th>담당</th><th style="width:34%">목표</th></tr>
+    <tr><td>참가자(1인)</td><td>기획, 데이터 조사(허브 API·파일 구조·센터 목록), Agent·분석 엔진·UI 개발, 시나리오 검증, 문서화</td><td>센터 PC에서 도민이 혼자 쓰는 완성 서비스</td></tr>
+    <tr><td>AI Agent(LLM)</td><td>질문 해석, 데이터 선택, 분석 계획, 결과 해석·설명</td><td>근거 있는 답을 단계 한도(기본 14회) 안에</td></tr>
+    <tr><td>결정적 엔진(코드)</td><td>데이터 적재·전처리·계산·차트·수치 검증·기록</td><td>AI가 숫자를 만들지 못하게 하는 안전장치</td></tr>
+  </table>
+
+  <h3>사용 모델</h3>
+  <p>OpenAI 호환 Chat Completions + 도구 호출(function calling)을 쓰는 모델이면 무엇이든 <code>.env</code> 세 줄로 교체됩니다.
+  원격 모델(개발·검증: <code>deepseek-ai/deepseek-v4.1-flash-1017</code>)과 <b>센터 PC 사양(GTX 1060 6GB)에 맞춘 로컬 모델</b>
+  두 가지로 실행할 수 있습니다. 로컬은 <code>setup_local_ai.bat</code> 한 번으로 Ollama·<code>qwen3.5:4b</code>·컨텍스트 16K를 설정하며,
+  {{LOCAL}} 분석 계산은 모델이 아닌 pandas가 하므로 모델이 바뀌어도 표의 숫자는 같습니다.</p>
+
+  <h3>Tool / API</h3>
+  <table>
+    <tr><th style="width:22%">도구</th><th>입력</th><th>하는 일</th></tr>
+    <tr><td><code>search_datasets</code></td><td>검색어, 즉시 적재 가능만</td><td>통합 카탈로그 BM25 검색, 상위 8개 요약</td></tr>
+    <tr><td><code>inspect_dataset</code></td><td>데이터 ID</td><td>설명·기간·파일 목록·API 요청/응답 변수·미리보기 5행</td></tr>
+    <tr><td><code>load_dataset</code></td><td>ID, 파일명, API 변수</td><td>FILE 다운로드/API 페이지 수집/센터 파일 → 표 D1…, 열 요약·경고</td></tr>
+    <tr><td><code>analyze</code></td><td>표, 단계 목록, 목적</td><td>filter·groupby·resample·pivot·share·pct_change·rolling·merge·corr 등 15종 → 결과 표 R1…</td></tr>
+    <tr><td><code>make_chart</code></td><td>표, 종류, x·y</td><td>선·막대·가로막대·원·산점도(한글 글꼴 자동)</td></tr>
+    <tr><td><code>finish</code></td><td>답변, 근거 표, 한계, 후속 질문</td><td>종료 → 수치 검증·보고서·재현 코드 생성</td></tr>
+  </table>
+  <p class="note">외부 API: 제주데이터허브 공개 메타데이터·첨부파일, open.jejudatahub.net 프록시 API(사용자 키), AI 모델 API 1종. 그 외 외부 데이터·서비스 없음.</p>
+
+  <h3>판단 및 자율 수행 범위</h3>
+  <table>
+    <tr><th style="width:22%">구분</th><th>범위</th></tr>
+    <tr><td class="ok">자율 수행</td><td>검색어 선택·재검색, 데이터 선택, API 요청 변수(기간 등) 결정, 분석 단계 설계, 오류 후 재시도, 차트 종류 선택, 설명 구성</td></tr>
+    <tr><td>제한(코드로 강제)</td><td>임의 코드 실행 금지(선언형 연산만), 질문당 도구 사용 상한, API 적재 상한 2만 행(일일 호출 한도 보호), 표 미리보기만 모델에 전달(원본 전체 미전송), LINK·HWP 등 비정형 적재 금지</td></tr>
+    <tr><td>사람 판단으로 남김</td><td>API 키 발급·‘프로젝트 담기’, 센터 데이터 반입·반출, 수치 경고가 뜬 답의 채택 여부</td></tr>
+    <tr><td>정직성 규칙(지시문)</td><td>숫자는 결과 표에서만, 데이터 기간·출처·결측 명시, 확인 못 한 추측 금지, 데이터가 없으면 없다고 답하고 대안 제시</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="no">04</span>데이터 활용 계획</h2>
+  <h3>필수 데이터</h3>
+  <table>
+    <tr><th>데이터</th><th>출처</th><th>활용 항목</th><th>이용 조건</th></tr>
+    <tr><td>제주데이터허브 데이터 목록 1,259종</td><td>jejudatahub.net 공개 API</td><td>제목·분류·설명·기간·갱신일·형태·제공처</td><td>공개 메타데이터, 오프라인 스냅샷 동봉</td></tr>
+    <tr><td>제주빅데이터센터 데이터 목록 70종</td><td>jejudatahub.net/center/data</td><td>데이터명·분류·테이블명·반출 가능 여부</td><td>목록만 사용, 원천은 센터 PC</td></tr>
+    <tr><td>FILE 데이터(예: 서귀포시 감귤 종류별 면적 및 생산량 추이, 이용자 유형별 버스정류소 이용 인원 현황)</td><td>제주데이터허브(서귀포시청, 제주빅데이터센터 등)</td><td>연도·읍면동·품종별 면적/생산량, 일자·정류소·이용자 유형·이용자 수 등 질문별</td><td>데이터별 출처 표기, 원본 재배포 안 함</td></tr>
+    <tr><td>API 데이터(예: 농산물 품종별 일일 거래 통계, 일일 정류소별 버스 이용자, 읍면동 유동인구)</td><td>open.jejudatahub.net</td><td>요청 변수(기간·품종 등)별 응답 항목 전체</td><td>사용자 프로젝트 키, 일일 호출 한도</td></tr>
+    <tr><td>센터 방문 데이터(카드 이용·와이파이·버스 등)</td><td>제주빅데이터센터</td><td>센터 제공 파일의 집계 항목</td><td>반출 기준 준수, 결과만 반출</td></tr>
+  </table>
+
+  <h3>수집·전처리</h3>
+  <table>
+    <tr><th style="width:24%">단계</th><th>방법</th></tr>
+    <tr><td>카탈로그</td><td>API·FILE·LINK 목록과 센터 목록을 받아 같은 ID 병합, 중복 분류 접두어 제거, 7일 주기 자동 갱신(실패 시 캐시·스냅샷)</td></tr>
+    <tr><td>적재</td><td>FILE은 최초 1회 내려받아 캐시(624MB 파일도 재사용), API는 <code>hasMore</code>까지 페이지 수집</td></tr>
+    <tr><td>정제</td><td>UTF-8/CP949 자동 판별, 따옴표 없는 쉼표 행 복구(버스정류소 파일 10만여 행 복구 → 공항 정류소 누락 방지), 숫자·날짜 변환, ID·코드 문자 유지</td></tr>
+    <tr><td>분석</td><td>선언형 단계 → pandas 계산, 단계별 동일 코드 기록, 결과 표 핸들로 출처 추적</td></tr>
+  </table>
+  <div class="callout"><b>왜 깨진 행 복구가 중요한가</b> — ‘이용자 유형별 버스정류소 이용 인원 현황’ 1,580만 행 중 10만여 행이 정류소 이름 안의 쉼표 때문에 칸이 어긋납니다. 이 행을 버리면 <code>제주국제공항(대정,화순,일주서로)</code> 같은 핵심 정류소가 통째로 빠져 순위가 왜곡됩니다. 엔진은 정상 행 구조를 기준으로 넘친 칸을 이름 열에 다시 합쳐 모든 행을 살립니다.</div>
+</section>
+
+<section>
+  <h2><span class="no">05</span>개발·탑재 계획</h2>
+  <h3>구현 범위(제출 시점 완료)</h3>
+  <table>
+    <tr><th style="width:26%">영역</th><th>내용</th><th style="width:12%">상태</th></tr>
+    <tr><td>Agent·도구 6종</td><td>도구 호출 루프, 빈 응답·깨진 인자 복구, 단계 한도</td><td class="ok">완료</td></tr>
+    <tr><td>카탈로그·검색</td><td>허브 1,259 + 센터 70, 한국어 BM25·동의어</td><td class="ok">완료</td></tr>
+    <tr><td>적재·전처리</td><td>FILE·API·센터, 인코딩·깨진 행·형 변환</td><td class="ok">완료</td></tr>
+    <tr><td>분석·차트</td><td>선언형 15종 + pandas 코드, 차트 5종</td><td class="ok">완료</td></tr>
+    <tr><td>검증·기록</td><td>수치 대조, 보고서·CSV·재현 코드·출처 JSON·ZIP</td><td class="ok">완료</td></tr>
+    <tr><td>화면·실행</td><td>Streamlit 웹, 예시 질문, 데이터 찾아보기, run.bat/run.sh, 명령줄</td><td class="ok">완료</td></tr>
+    <tr><td>테스트</td><td>분석 엔진·수치 검증·API 수집 단위 테스트, 대표 질문 시나리오 실측</td><td class="ok">완료</td></tr>
+  </table>
+
+  <h3>기술 환경</h3>
+  <table>
+    <tr><th style="width:26%">항목</th><th>내용</th></tr>
+    <tr><td>언어·실행</td><td>Python 3.12, uv(의존성 고정 <code>uv.lock</code>, 자동 설치)</td></tr>
+    <tr><td>주요 라이브러리</td><td>pandas, numpy, matplotlib, Streamlit, httpx, openai-python, openpyxl</td></tr>
+    <tr><td>센터 PC 요구</td><td>최소사양(i7-8700 / GTX 1060 / RAM 32GB) 충족: GPU 불필요, 624MB·1,580만 행 파일 적재 시 메모리 약 3.6GB·약 20초(실측)</td></tr>
+    <tr><td>외부 의존성</td><td>인터넷(데이터허브), AI 모델 API 1종. 키는 <code>.env</code>에만 저장, 평가용 키는 제출 ZIP 매뉴얼에 포함. 로컬 모델 서버로 대체 가능</td></tr>
+    <tr><td>접속 주소(허용 목록용)</td><td><code>jejudatahub.net</code>, <code>open.jejudatahub.net</code>, AI 모델 <code>api-cdn.deploy.com</code>(평가용) · 최초 설치 때 <code>astral.sh</code>, <code>github.com</code>, <code>pypi.org</code>, <code>files.pythonhosted.org</code></td></tr>
+  </table>
+</section>
+
+<section>
+  <h3>UI 구성 (실제 화면)</h3>
+  <figure><img class="shot" src="ui-answer.png" alt="답변 화면"><figcaption>질문하기: 왼쪽 설정 상태·예시 질문, 오른쪽 진행 과정·핵심 답·근거 표</figcaption></figure>
+  <div class="grid2">
+    <figure><img class="shot" src="ui-browse.png" alt="데이터 찾아보기"><figcaption>데이터 찾아보기: AI 없이 1,329종 검색·상세·미리 불러오기</figcaption></figure>
+    <figure><img class="shot" src="ui-evidence.png" alt="차트와 검증"><figcaption>답변 아래: 차트, 수치 검증, 한계·출처·분석 과정, 결과 내려받기(ZIP)</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2><span class="no">06</span>실행 결과와 검증</h2>
+  {{SCENARIO_TABLE}}
+  <div class="grid2">
+    <figure><img class="shot" src="chart-citrus.png" alt="감귤 차트"><figcaption>“서귀포시 감귤 종류별 생산량 추이” 답변의 차트</figcaption></figure>
+    <figure><img class="shot" src="chart-bus.png" alt="버스 차트"><figcaption>“버스 이용객 많은 정류소” 답변의 차트</figcaption></figure>
+  </div>
+  <h3>검증 방법</h3>
+  <ul>
+    <li><b>수치 대조와 자기 수정</b>: 답변의 집계 숫자를 세션의 결과 표·도구 관측값과 대조합니다. 개발 중 모델이 직접 뺄셈한 “8.3만 톤 감소”, “1위와 2위 차이 126,633명”을 근거 없음으로 잡았고, 이제는 finish 단계에서 이런 숫자를 Agent에 되돌려 analyze로 계산해 표에 남기거나 답에서 빼도록 한 번 스스로 고치게 합니다.</li>
+    <li><b>처음 보는 질문으로 심사 기준 점검</b>: 대표 질문 밖의 질문 6개를 새 환경에서 돌려 결과 표와 하나씩 대조했습니다. 숫자는 표에 있지만 뜻이 틀린 경우(빠진 달을 건너뛴 ‘전월 대비’, 증감 인원을 ‘증감률’로 이름 붙인 열, 기준 미적용 항목을 뺀 ‘모두 적합’)를 찾아, 증감률은 날짜 기준 바로 앞 기간과만 비교하고 비율 이름의 열은 나눗셈으로만 만들도록 엔진에서 막았습니다. 숫자 대조만으로는 문장의 뜻까지 보장하지 못하므로, 순위·전체 판단은 후보 전체를 집계한 표에서만 말하도록 지시문을 강화했습니다.</li>
+    <li><b>재현</b>: 결과 ZIP의 <code>analysis.py</code>를 실행하면 데이터허브에서 원본을 다시 받아 같은 결과 표를 출력합니다(단위 테스트로 생성 코드 = 엔진 결과 동일성 확인). 원본 표는 재배포하지 않고 결과 표만 동봉합니다.</li>
+    <li><b>단위 테스트 25개</b>: 분석 엔진, 날짜 필터, 기간 정렬 증감률, 비율 열 검사, 코드 열 보존, 수치 표기(반올림·만/억·혼합 표기·백만원 단위·노선번호 제외·개수 단위), API 페이지 수집·키 오류, 가짜 LLM으로 돌리는 Agent 루프(자기 수정·깨진 인자 복구).</li>
+  </ul>
+  <h3>한계와 대응</h3>
+  <ul>
+    <li>데이터허브 다수 자료가 2021~2025년 갱신분 → 답변마다 실제 수록 기간을 밝히도록 강제.</li>
+    <li>API 데이터는 사용자 키가 필요 → 키가 없으면 같은 주제의 FILE·센터 데이터를 찾거나 발급 방법을 안내.</li>
+    <li>모델 품질에 따라 데이터 선택이 달라질 수 있음 → 계산은 엔진이, 숫자는 검증이 지키는 구조로 위험을 숫자 오류가 아닌 ‘덜 좋은 데이터 선택’으로 한정.</li>
+  </ul>
+  <h3>센터 활용 방안</h3>
+  <p>센터 분석실 PC에 설치해 방문 도민의 첫 분석 도구로 쓰고, 센터 방문 데이터 폴더를 연결해 반출 불가 데이터도 같은 화면에서 분석합니다.
+  질문·데이터 선택 기록(<code>provenance.json</code>)은 어떤 데이터가 자주 쓰이는지 보여 주어 데이터 개방·정비 우선순위 판단에 활용할 수 있습니다.</p>
+</section>
+
+</body>
+</html>

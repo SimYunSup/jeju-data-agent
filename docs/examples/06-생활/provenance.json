@@ -1,0 +1,307 @@
+{
+ "question": "제주시와 서귀포시에 전기차 충전소가 각각 몇 곳 있어?",
+ "tables": {
+  "D1": {
+   "entry_id": "hub:862",
+   "title": "전기자동차 충전소 정보",
+   "source_url": "https://jejudatahub.net/data/view/data/862",
+   "method": "API",
+   "detail": {
+    "params": {}
+   },
+   "rows": 3446,
+   "total_rows": 3446,
+   "loaded_at": "2026-11-10 15:54"
+  },
+  "R1": {
+   "entry_id": "hub:862",
+   "title": "전기자동차 충전소 정보",
+   "source_url": "https://jejudatahub.net/data/view/data/862",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "충전소 데이터의 좌표 범위와 전체 건수 확인, 시군구 구분 가능성 점검",
+    "steps": [
+     {
+      "op": "describe",
+      "columns": [
+       "latitude",
+       "longitude",
+       "chargerCount",
+       "quickChargerCount"
+      ]
+     }
+    ]
+   },
+   "rows": 4,
+   "total_rows": null,
+   "loaded_at": ""
+  }
+ },
+ "trace": [
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "전기차 충전소"
+   },
+   "ok": true,
+   "summary": "'전기차 충전소' → 전기자동차 충전소 정보, 월별 전기자동차 대기 시간, 일별 전기자동차 대기 시간, 요일별 전기자동차 대기 시간",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "전기자동차 충전시설"
+   },
+   "ok": true,
+   "summary": "'전기자동차 충전시설' → 전기자동차 충전소 정보, 월별 전기자동차 충전 이력, 일별 전기자동차 충전 이력, 요일별 전기자동차 충전 이력",
+   "seconds": 0.0
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:862"
+   },
+   "ok": true,
+   "summary": "전기자동차 충전소 정보 (API, 2025-09-18~2025-09-18)",
+   "seconds": 0.05
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:862",
+    "api_params": {}
+   },
+   "ok": true,
+   "summary": "D1: 전기자동차 충전소 정보 3,446행",
+   "seconds": 0.92
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "충전소 주소 현황",
+    "loadable_only": true
+   },
+   "ok": true,
+   "summary": "'충전소 주소 현황' → 전기자동차 충전소 정보, 월별 전기자동차 대기 시간, 일별 전기자동차 대기 시간, 요일별 전기자동차 대기 시간",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "전기차 충전기 설치 현황 제주시 서귀포시"
+   },
+   "ok": true,
+   "summary": "'전기차 충전기 설치 현황 제주시 서귀포시' → 월별 전기자동차 대기 시간, 일별 전기자동차 대기 시간, 요일별 전기자동차 대기 시간, 월별 전기자동차 충전 이력",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "purpose": "주소 기준으로 제주시/서귀포시 충전소 행 수와 고유 충전소 수, 충전기 대수 집계",
+    "steps": [
+     {
+      "op": "derive",
+      "name": "시군구",
+      "left": "addressJibun",
+      "operator": "+",
+      "right": 0
+     }
+    ]
+   },
+   "ok": false,
+   "summary": "오류: 1단계(derive): 없는 열: ['addressJibun']. 사용 가능한 열: ['chargingPlace', 'chargingPlaceDetail', 'holiday', 'startTime', 'endTime', 'chargingFlag', 'quickChargingFlag', 'quickChargingType', 'chargerCount', 'qu",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "전기차 충전소 표준데이터 주소 위도 경도"
+   },
+   "ok": true,
+   "summary": "'전기차 충전소 표준데이터 주소 위도 경도' → 전기자동차 충전소 정보, 월별 전기자동차 대기 시간, 일별 전기자동차 대기 시간, 요일별 전기자동차 대기 시간",
+   "seconds": 0.01
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "제주시 서귀포시 행정구역 읍면동 경계",
+    "loadable_only": true
+   },
+   "ok": true,
+   "summary": "'제주시 서귀포시 행정구역 읍면동 경계' → 시도별 인구 이동 정보, 서귀포시 전통시장 정보, 읍면동별 버스 탑승자수, 읍면동별 와이파이 사용량",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "충전소 위치 정보 주소"
+   },
+   "ok": true,
+   "summary": "'충전소 위치 정보 주소' → 전기자동차 충전소 정보, 월별 전기자동차 대기 시간, 일별 전기자동차 대기 시간, 요일별 전기자동차 대기 시간",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "친환경자동차 충전 인프라 구축 현황"
+   },
+   "ok": true,
+   "summary": "'친환경자동차 충전 인프라 구축 현황' → 월별 전기자동차 충전 이력, 일별 전기자동차 충전 이력, 요일별 전기자동차 충전 이력, 전기자동차 충전소 정보",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "급속충전기 완속충전기 대수"
+   },
+   "ok": true,
+   "summary": "'급속충전기 완속충전기 대수' → 월별 전기자동차 충전 이력, 일별 전기자동차 충전 이력, 요일별 전기자동차 충전 이력, 전기자동차 충전소 정보",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "자동차 등록 현황 전기차"
+   },
+   "ok": true,
+   "summary": "'자동차 등록 현황 전기차' → 제주특별자치도 전기자동차 보급 현황, 월별 전기자동차 대기 시간, 일별 전기자동차 대기 시간, 월별 전기자동차 충전 이력",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "충전소",
+    "loadable_only": true
+   },
+   "ok": true,
+   "summary": "'충전소' → 전기자동차 충전소 정보, 월별 전기자동차 대기 시간, 일별 전기자동차 대기 시간, 요일별 전기자동차 대기 시간",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "읍면동 주소 현황",
+    "loadable_only": true
+   },
+   "ok": true,
+   "summary": "'읍면동 주소 현황' → 카드 이용 현황(읍면동)_v01, 카드 이용 현황(읍면동)_v02, 외식업 포스 이용 현황(읍면동), 읍면동별 버스 탑승자수",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "전기차"
+   },
+   "ok": true,
+   "summary": "'전기차' → 월별 전기자동차 충전 이력, 일별 전기자동차 충전 이력, 요일별 전기자동차 충전 이력, 월별 전기자동차 대기 시간",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "충전기"
+   },
+   "ok": true,
+   "summary": "'충전기' → 월별 전기자동차 충전 이력, 일별 전기자동차 충전 이력, 요일별 전기자동차 충전 이력, 전기자동차 충전소 정보",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "행정동 경계 좌표 GIS"
+   },
+   "ok": true,
+   "summary": "'행정동 경계 좌표 GIS' → 음식물쓰레기 배출현황_서귀포, 약국 정보, 산후조리업 정보, 여행업 정보(통합)",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "제주특별자치도 행정구역 현황 읍면동",
+    "loadable_only": true
+   },
+   "ok": true,
+   "summary": "'제주특별자치도 행정구역 현황 읍면동' → 시도별 인구 이동 정보, 제주 리·통사무소 정보, 카드 이용 현황(읍면동)_v01, 카드 이용 현황(읍면동)_v02",
+   "seconds": 0.01
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "행정시별 시설 현황 주소 시군구",
+    "loadable_only": true
+   },
+   "ok": true,
+   "summary": "'행정시별 시설 현황 주소 시군구' → 제주특별자치도 청년사회경제실태조사-시군구별 , 시군구별 현재흡연율 통계, 시도별 자동차 등록 수 데이터, 시도별 1인 가구 비율 데이터",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "제주 전기차 충전소 설치 운영 현황 행정시"
+   },
+   "ok": true,
+   "summary": "'제주 전기차 충전소 설치 운영 현황 행정시' → 전기자동차 충전소 정보, 월별 전기자동차 충전 이력, 일별 전기자동차 충전 이력, 요일별 전기자동차 충전 이력",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "충전소 데이터의 좌표 범위와 전체 건수 확인, 시군구 구분 가능성 점검",
+    "table": "D1",
+    "steps": [
+     {
+      "op": "describe",
+      "columns": [
+       "latitude",
+       "longitude",
+       "chargerCount",
+       "quickChargerCount"
+      ]
+     }
+    ]
+   },
+   "ok": true,
+   "summary": "R1: 4행 × 9열",
+   "seconds": 0.03
+  }
+ ],
+ "checks": [
+  {
+   "text": "862",
+   "value": 862.0,
+   "verified": true
+  },
+  {
+   "text": "3,446",
+   "value": 3446.0,
+   "verified": true
+  },
+  {
+   "text": "3,050",
+   "value": 3050.0,
+   "verified": true
+  },
+  {
+   "text": "3,446",
+   "value": 3446.0,
+   "verified": true
+  },
+  {
+   "text": "3,050",
+   "value": 3050.0,
+   "verified": true
+  },
+  {
+   "text": "33.0",
+   "value": 33.0,
+   "verified": true
+  },
+  {
+   "text": "125.0",
+   "value": 125.0,
+   "verified": true
+  }
+ ]
+}

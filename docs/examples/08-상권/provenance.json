@@ -1,0 +1,919 @@
+{
+ "question": "애월읍에 카페를 차리면 손님이 많을까?",
+ "tables": {
+  "D1": {
+   "entry_id": "hub:748",
+   "title": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과",
+   "source_url": "https://jejudatahub.net/data/view/data/748",
+   "method": "FILE",
+   "detail": {
+    "file": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과_20(수정).csv"
+   },
+   "rows": 26938,
+   "total_rows": null,
+   "loaded_at": "2026-11-10 15:56"
+  },
+  "R1": {
+   "entry_id": "hub:748",
+   "title": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과",
+   "source_url": "https://jejudatahub.net/data/view/data/748",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "2020년 읍면동별 카페(비알콜 음료점업) 카드매출 합계 순위 확인",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "업종명",
+      "cmp": "==",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "읍면동명"
+      ],
+      "agg": {
+       "이용금액": "sum",
+       "이용자수": "sum"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "이용금액",
+      "ascending": false
+     }
+    ]
+   },
+   "rows": 43,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R2": {
+   "entry_id": "hub:748",
+   "title": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과",
+   "source_url": "https://jejudatahub.net/data/view/data/748",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "애월읍 카페 매출의 2020년 월별 추이와 유동인구 확인",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "읍면동명",
+      "cmp": "==",
+      "value": "애월읍"
+     },
+     {
+      "op": "filter",
+      "column": "업종명",
+      "cmp": "==",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "년월"
+      ],
+      "agg": {
+       "이용금액": "sum",
+       "이용자수": "sum",
+       "방문인구": "mean",
+       "거주인구": "mean"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "년월",
+      "ascending": true
+     }
+    ]
+   },
+   "rows": 12,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R4": {
+   "entry_id": "hub:748",
+   "title": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과",
+   "source_url": "https://jejudatahub.net/data/view/data/748",
+   "method": "DERIVED",
+   "detail": {
+    "from": "R1",
+    "purpose": "제주 전체 카페 매출에서 애월읍이 차지하는 비중",
+    "steps": [
+     {
+      "column": "이용금액",
+      "name": "전체대비비중",
+      "op": "share"
+     }
+    ]
+   },
+   "rows": 43,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "D3": {
+   "entry_id": "hub:746",
+   "title": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업 결과",
+   "source_url": "https://jejudatahub.net/data/view/data/746",
+   "method": "FILE",
+   "detail": {
+    "file": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업결과_21.csv"
+   },
+   "rows": 193855,
+   "total_rows": null,
+   "loaded_at": "2026-11-10 15:56"
+  },
+  "R5": {
+   "entry_id": "hub:746",
+   "title": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업 결과",
+   "source_url": "https://jejudatahub.net/data/view/data/746",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D3",
+    "purpose": "2021년 1~5월 애월읍 카페 매출의 도민 vs 관광객 구성과 매장수 확인",
+    "steps": [
+     {
+      "cmp": "==",
+      "column": "업종명",
+      "op": "filter",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "cmp": "==",
+      "column": "읍면동명",
+      "op": "filter",
+      "value": "애월읍"
+     },
+     {
+      "agg": {
+       "매장수": "mean",
+       "이용금액": "sum"
+      },
+      "by": [
+       "관광구분"
+      ],
+      "op": "groupby"
+     },
+     {
+      "op": "share",
+      "column": "이용금액",
+      "name": "매출비중"
+     }
+    ]
+   },
+   "rows": 3,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R6": {
+   "entry_id": "hub:746",
+   "title": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업 결과",
+   "source_url": "https://jejudatahub.net/data/view/data/746",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D3",
+    "purpose": "2021년 1~5월 읍면 지역 중 카페 매출 순위에서 애월읍 위치 확인",
+    "steps": [
+     {
+      "cmp": "==",
+      "column": "업종명",
+      "op": "filter",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "agg": {
+       "이용금액": "sum"
+      },
+      "by": [
+       "읍면동명"
+      ],
+      "op": "groupby"
+     },
+     {
+      "op": "sort",
+      "by": "이용금액",
+      "ascending": false
+     }
+    ]
+   },
+   "rows": 59,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R8": {
+   "entry_id": "hub:746",
+   "title": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업 결과",
+   "source_url": "https://jejudatahub.net/data/view/data/746",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D3",
+    "purpose": "2021년 1~5월 애월읍 카페 매출의 월별 추이 (계절성 확인)",
+    "steps": [
+     {
+      "cmp": "==",
+      "column": "업종명",
+      "op": "filter",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "cmp": "==",
+      "column": "읍면동명",
+      "op": "filter",
+      "value": "애월읍"
+     },
+     {
+      "agg": {
+       "이용금액": "sum"
+      },
+      "by": [
+       "년월"
+      ],
+      "op": "groupby"
+     },
+     {
+      "op": "sort",
+      "by": "년월",
+      "ascending": true
+     }
+    ]
+   },
+   "rows": 5,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R12": {
+   "entry_id": "hub:746",
+   "title": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업 결과",
+   "source_url": "https://jejudatahub.net/data/view/data/746",
+   "method": "DERIVED",
+   "detail": {
+    "from": "R8",
+    "purpose": "2021년 5월 매출이 1월의 몇 배인지 계산",
+    "steps": [
+     {
+      "left": "이용금액",
+      "name": "1월대비배수",
+      "op": "derive",
+      "operator": "/",
+      "right": 40321560
+     }
+    ]
+   },
+   "rows": 5,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R9": {
+   "entry_id": "hub:748",
+   "title": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과",
+   "source_url": "https://jejudatahub.net/data/view/data/748",
+   "method": "DERIVED",
+   "detail": {
+    "from": "R1",
+    "purpose": "읍면동별 카페 이용자 1인당 결제액 비교에서 애월읍 위치 확인",
+    "steps": [
+     {
+      "name": "이용자1인당결제액",
+      "left": "이용금액",
+      "operator": "/",
+      "right": "이용자수",
+      "op": "derive"
+     },
+     {
+      "op": "sort",
+      "by": "이용자1인당결제액",
+      "ascending": false
+     },
+     {
+      "op": "head",
+      "n": 10
+     }
+    ]
+   },
+   "rows": 10,
+   "total_rows": null,
+   "loaded_at": ""
+  }
+ },
+ "trace": [
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "카페 상권 매출"
+   },
+   "ok": true,
+   "summary": "'카페 상권 매출' → 제주특별자치도_주제3_상권분석을 위한 유동인, 제주특별자치도_주제1_제주 예비창업자를 위한, 제주특별자치도 상가(상권) 정보, 메뉴별 외식업 매출액",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "애월 유동인구"
+   },
+   "ok": true,
+   "summary": "'애월 유동인구' → 내국인 유동인구 구성비율, 제주도 방문 내국인 유동인구 추이, 제주도 거주 내국인 유동인구 추이, 제주도 근무 내국인 유동인구 추이",
+   "seconds": 0.0
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:746"
+   },
+   "ok": true,
+   "summary": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업 결과 (FILE, 2017-01-01~2021-05-31)",
+   "seconds": 0.05
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:748"
+   },
+   "ok": true,
+   "summary": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과 (FILE, 2017-01-01~2021-05-31)",
+   "seconds": 0.03
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:748",
+    "file_name": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과_20(수정).csv"
+   },
+   "ok": true,
+   "summary": "D1: 제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과 26,938행",
+   "seconds": 0.12
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:748",
+    "file_name": "제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과_19.csv"
+   },
+   "ok": true,
+   "summary": "D2: 제주특별자치도_주제3_상권분석을 위한 유동인구에 따른 카드 매출액 변화 데이터 활용_매쉬업결과 27,416행",
+   "seconds": 0.11
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "업종명",
+      "cmp": "==",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "읍면동명"
+      ],
+      "agg": {
+       "이용금액": "sum",
+       "이용자수": "sum"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "이용금액",
+      "ascending": false
+     }
+    ],
+    "purpose": "2020년 읍면동별 카페(비알콜 음료점업) 카드매출 합계 순위 확인"
+   },
+   "ok": true,
+   "summary": "R1: 43행 × 3열",
+   "seconds": 0.02
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "읍면동명",
+      "cmp": "==",
+      "value": "애월읍"
+     },
+     {
+      "op": "filter",
+      "column": "업종명",
+      "cmp": "==",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "년월"
+      ],
+      "agg": {
+       "이용금액": "sum",
+       "이용자수": "sum",
+       "방문인구": "mean",
+       "거주인구": "mean"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "년월",
+      "ascending": true
+     }
+    ],
+    "purpose": "애월읍 카페 매출의 2020년 월별 추이와 유동인구 확인"
+   },
+   "ok": true,
+   "summary": "R2: 12행 × 5열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "애월읍 카페 월매출과 방문인구가 같이 움직이는지 상관계수 확인",
+    "steps": [
+     {
+      "columns": [
+       "이용금액",
+       "방문인구"
+      ],
+      "op": "corr"
+     }
+    ],
+    "table": "R2"
+   },
+   "ok": true,
+   "summary": "R3: 1행 × 4열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "제주 전체 카페 매출에서 애월읍이 차지하는 비중",
+    "steps": [
+     {
+      "column": "이용금액",
+      "name": "전체대비비중",
+      "op": "share"
+     }
+    ],
+    "table": "R1"
+   },
+   "ok": true,
+   "summary": "R4: 43행 × 4열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:746"
+   },
+   "ok": true,
+   "summary": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업 결과 (FILE, 2017-01-01~2021-05-31)",
+   "seconds": 0.0
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:746",
+    "file_name": "제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업결과_21.csv"
+   },
+   "ok": true,
+   "summary": "D3: 제주특별자치도_주제1_제주 예비창업자를 위한 업종별 카드 매출과 매장수 데이터 활용_매쉬업 결과 193,855행",
+   "seconds": 2.54
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "2021년 1~5월 애월읍 카페 매출의 도민 vs 관광객 구성과 매장수 확인",
+    "steps": [
+     {
+      "cmp": "==",
+      "column": "업종명",
+      "op": "filter",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "cmp": "==",
+      "column": "읍면동명",
+      "op": "filter",
+      "value": "애월읍"
+     },
+     {
+      "agg": {
+       "매장수": "mean",
+       "이용금액": "sum"
+      },
+      "by": [
+       "관광구분"
+      ],
+      "op": "groupby"
+     },
+     {
+      "op": "share",
+      "column": "이용금액",
+      "name": "매출비중"
+     }
+    ],
+    "table": "D3"
+   },
+   "ok": true,
+   "summary": "R5: 3행 × 4열",
+   "seconds": 0.02
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "2021년 1~5월 읍면 지역 중 카페 매출 순위에서 애월읍 위치 확인",
+    "steps": [
+     {
+      "cmp": "==",
+      "column": "업종명",
+      "op": "filter",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "agg": {
+       "이용금액": "sum"
+      },
+      "by": [
+       "읍면동명"
+      ],
+      "op": "groupby"
+     },
+     {
+      "op": "sort",
+      "by": "이용금액",
+      "ascending": false
+     }
+    ],
+    "table": "D3"
+   },
+   "ok": true,
+   "summary": "R6: 59행 × 2열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "매장수 값이 읍면동별로 구분되는지, 애월읍 카페 매장수 확인",
+    "steps": [
+     {
+      "cmp": "==",
+      "column": "업종명",
+      "op": "filter",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "agg": {
+       "매장수": "mean"
+      },
+      "by": [
+       "읍면동명"
+      ],
+      "op": "groupby"
+     },
+     {
+      "op": "sort",
+      "by": "매장수",
+      "ascending": false
+     },
+     {
+      "op": "head",
+      "n": 10
+     }
+    ],
+    "table": "D3"
+   },
+   "ok": true,
+   "summary": "R7: 10행 × 2열",
+   "seconds": 0.02
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "2021년 1~5월 애월읍 카페 매출의 월별 추이 (계절성 확인)",
+    "steps": [
+     {
+      "cmp": "==",
+      "column": "업종명",
+      "op": "filter",
+      "value": "비알콜 음료점업"
+     },
+     {
+      "cmp": "==",
+      "column": "읍면동명",
+      "op": "filter",
+      "value": "애월읍"
+     },
+     {
+      "agg": {
+       "이용금액": "sum"
+      },
+      "by": [
+       "년월"
+      ],
+      "op": "groupby"
+     },
+     {
+      "op": "sort",
+      "by": "년월",
+      "ascending": true
+     }
+    ],
+    "table": "D3"
+   },
+   "ok": true,
+   "summary": "R8: 5행 × 2열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "읍면동별 카페 이용자 1인당 결제액 비교에서 애월읍 위치 확인",
+    "steps": [
+     {
+      "name": "이용자1인당결제액",
+      "left": "이용금액",
+      "operator": "/",
+      "right": "이용자수",
+      "op": "derive"
+     },
+     {
+      "op": "sort",
+      "by": "이용자1인당결제액",
+      "ascending": false
+     },
+     {
+      "op": "head",
+      "n": 10
+     }
+    ],
+    "table": "R1"
+   },
+   "ok": true,
+   "summary": "R9: 10행 × 4열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "table": "R1",
+    "kind": "barh",
+    "x": "읍면동명",
+    "y": [
+     "이용금액"
+    ],
+    "title": "2020년 읍면동별 카페(비알콜 음료점업) 카드매출 상위 10곳"
+   },
+   "ok": true,
+   "summary": "차트 '2020년 읍면동별 카페(비알콜 음료점업) 카드매출 상위 10곳'",
+   "seconds": 0.13
+  },
+  {
+   "tool": "finish",
+   "args": {},
+   "ok": false,
+   "summary": "수치 검증 실패 → 스스로 수정: 73.2%, 2.5",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "애월읍 카페 매출 중 관광객(개별+단체) 비중 합계 계산",
+    "steps": [
+     {
+      "cmp": "in",
+      "column": "관광구분",
+      "op": "filter",
+      "value": [
+       "개별",
+       "단체"
+      ]
+     },
+     {
+      "agg": {
+       "매출비중": "sum",
+       "이용금액": "sum"
+      },
+      "by": [
+       "관광구분"
+      ],
+      "op": "groupby"
+     }
+    ],
+    "table": "R5"
+   },
+   "ok": true,
+   "summary": "R10: 2행 × 3열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "2021년 5월 매출이 1월 대비 몇 배인지 계산",
+    "steps": [
+     {
+      "name": "월매출",
+      "left": "이용금액",
+      "operator": "/",
+      "right": "이용금액",
+      "op": "derive"
+     }
+    ],
+    "table": "R8"
+   },
+   "ok": true,
+   "summary": "R11: 5행 × 3열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "관광객(개별+단체) 매출 합계를 한 행으로 계산",
+    "steps": [
+     {
+      "agg": {
+       "매출비중": "sum",
+       "이용금액": "sum"
+      },
+      "by": [],
+      "op": "groupby"
+     }
+    ],
+    "table": "R10"
+   },
+   "ok": false,
+   "summary": "오류: 1단계(groupby): by에 묶을 열을 1개 이상 넣으세요(전체 합계는 describe 또는 derive/sum_of를 쓰세요)",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "2021년 5월 매출이 1월의 몇 배인지 계산",
+    "steps": [
+     {
+      "left": "이용금액",
+      "name": "1월대비배수",
+      "op": "derive",
+      "operator": "/",
+      "right": 40321560
+     }
+    ],
+    "table": "R8"
+   },
+   "ok": true,
+   "summary": "R12: 5행 × 3열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "관광객 매출 비중 합계와 도민 비중 대비 배수 계산",
+    "steps": [
+     {
+      "name": "관광객매출",
+      "op": "derive",
+      "sum_of": [
+       "이용금액"
+      ]
+     },
+     {
+      "left": "이용금액",
+      "name": "도민대비배수",
+      "op": "derive",
+      "operator": "/",
+      "right": 100952560
+     }
+    ],
+    "table": "R10"
+   },
+   "ok": true,
+   "summary": "R13: 2행 × 5열",
+   "seconds": 0.01
+  }
+ ],
+ "checks": [
+  {
+   "text": "5억 9,706만",
+   "value": 597060000.0,
+   "verified": true
+  },
+  {
+   "text": "3억 7,696만",
+   "value": 376960000.0,
+   "verified": true
+  },
+  {
+   "text": "20억 4,607만",
+   "value": 2046070000.0,
+   "verified": true
+  },
+  {
+   "text": "18억 2,913만",
+   "value": 1829130000.0,
+   "verified": true
+  },
+  {
+   "text": "14억 7,419만",
+   "value": 1474190000.0,
+   "verified": true
+  },
+  {
+   "text": "5억 9,706만",
+   "value": 597060000.0,
+   "verified": true
+  },
+  {
+   "text": "1억 38만",
+   "value": 100380000.0,
+   "verified": true
+  },
+  {
+   "text": "46,217",
+   "value": 46217.0,
+   "verified": true
+  },
+  {
+   "text": "43",
+   "value": 43.0,
+   "verified": true
+  },
+  {
+   "text": "12,919",
+   "value": 12919.0,
+   "verified": true
+  },
+  {
+   "text": "217,278",
+   "value": 217278.0,
+   "verified": true
+  },
+  {
+   "text": "209,387",
+   "value": 209387.0,
+   "verified": true
+  },
+  {
+   "text": "151,999",
+   "value": 151999.0,
+   "verified": true
+  },
+  {
+   "text": "46,217",
+   "value": 46217.0,
+   "verified": true
+  },
+  {
+   "text": "45.9%",
+   "value": 45.9,
+   "verified": true
+  },
+  {
+   "text": "27.3%",
+   "value": 27.3,
+   "verified": true
+  },
+  {
+   "text": "26.8%",
+   "value": 26.8,
+   "verified": true
+  },
+  {
+   "text": "26.8%",
+   "value": 26.8,
+   "verified": true
+  },
+  {
+   "text": "2.7",
+   "value": 2.7,
+   "verified": false
+  },
+  {
+   "text": "0.758",
+   "value": 0.758,
+   "verified": true
+  },
+  {
+   "text": "4,032만",
+   "value": 40320000.0,
+   "verified": true
+  },
+  {
+   "text": "2.49",
+   "value": 2.49,
+   "verified": true
+  },
+  {
+   "text": "2.7",
+   "value": 2.7,
+   "verified": false
+  },
+  {
+   "text": "12,919",
+   "value": 12919.0,
+   "verified": true
+  }
+ ]
+}

@@ -1,0 +1,605 @@
+{
+ "question": "제주에서 교통사고가 자주 나는 지역은 어디야?",
+ "tables": {
+  "D1": {
+   "entry_id": "hub:863",
+   "title": "교통사고 다발지역 정보",
+   "source_url": "https://jejudatahub.net/data/view/data/863",
+   "method": "API",
+   "detail": {
+    "params": {}
+   },
+   "rows": 42,
+   "total_rows": 42,
+   "loaded_at": "2026-11-10 15:55"
+  },
+  "R1": {
+   "entry_id": "hub:863",
+   "title": "교통사고 다발지역 정보",
+   "source_url": "https://jejudatahub.net/data/view/data/863",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "제주시/서귀포시 6개 다발지점 구역별 사고 규모 확인",
+    "steps": [
+     {
+      "op": "groupby",
+      "by": [
+       "sidoSigungu"
+      ],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "occurrenceCount",
+      "ascending": false
+     }
+    ]
+   },
+   "rows": 12,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R3": {
+   "entry_id": "hub:863",
+   "title": "교통사고 다발지역 정보",
+   "source_url": "https://jejudatahub.net/data/view/data/863",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "제주시 권역 합계",
+    "steps": [
+     {
+      "column": "sidoSigungu",
+      "cmp": "contains",
+      "op": "filter",
+      "value": "제주시"
+     },
+     {
+      "name": "권역",
+      "left": "occurrenceCount",
+      "operator": "*",
+      "op": "derive",
+      "right": 0
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "권역"
+      ],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "deathCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      }
+     }
+    ]
+   },
+   "rows": 1,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R4": {
+   "entry_id": "hub:863",
+   "title": "교통사고 다발지역 정보",
+   "source_url": "https://jejudatahub.net/data/view/data/863",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "서귀포시 권역 합계",
+    "steps": [
+     {
+      "column": "sidoSigungu",
+      "cmp": "contains",
+      "op": "filter",
+      "value": "서귀포시"
+     },
+     {
+      "name": "권역",
+      "left": "occurrenceCount",
+      "operator": "*",
+      "op": "derive",
+      "right": 0
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "권역"
+      ],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "deathCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      }
+     }
+    ]
+   },
+   "rows": 1,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R5": {
+   "entry_id": "hub:863",
+   "title": "교통사고 다발지역 정보",
+   "source_url": "https://jejudatahub.net/data/view/data/863",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "사고 건수 상위 6개 지점 + 중상자 많은 지점 확인",
+    "steps": [
+     {
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "deathCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      },
+      "by": [
+       "occurrencePlace"
+      ],
+      "op": "groupby"
+     },
+     {
+      "ascending": false,
+      "by": "occurrenceCount",
+      "op": "sort"
+     },
+     {
+      "n": 6,
+      "op": "head"
+     }
+    ]
+   },
+   "rows": 6,
+   "total_rows": null,
+   "loaded_at": ""
+  }
+ },
+ "trace": [
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "교통사고 발생 현황"
+   },
+   "ok": true,
+   "summary": "'교통사고 발생 현황' → 시도별 교통사고 발생 현황, 시도별 뺑소니 교통사고 현황, 시도별 무면허 교통사고 현황, 시도별 음주 운전 교통사고 현황",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "교통사고 다발지역"
+   },
+   "ok": true,
+   "summary": "'교통사고 다발지역' → 교통사고 다발지역 정보, 제주 택시 교통사고 현황, 제주 화물차 교통사고 현황, 제주 노면 상태별 교통사고 통계",
+   "seconds": 0.0
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:863"
+   },
+   "ok": true,
+   "summary": "교통사고 다발지역 정보 (API, 2017-01-01~2023-12-31)",
+   "seconds": 0.05
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:863",
+    "api_params": {}
+   },
+   "ok": true,
+   "summary": "D1: 교통사고 다발지역 정보 42행",
+   "seconds": 0.05
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "purpose": "제주시/서귀포시 6개 다발지점 구역별 사고 규모 확인",
+    "steps": [
+     {
+      "op": "groupby",
+      "by": [
+       "sidoSigungu"
+      ],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "occurrenceCount",
+      "ascending": false
+     }
+    ]
+   },
+   "ok": true,
+   "summary": "R1: 12행 × 5열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "purpose": "지점(장소)별 사고 건수 상위 지역 파악",
+    "steps": [
+     {
+      "op": "groupby",
+      "by": [
+       "occurrencePlace"
+      ],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "deathCount": "sum",
+       "*": "count"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "occurrenceCount",
+      "ascending": false
+     },
+     {
+      "op": "head",
+      "n": 10
+     }
+    ]
+   },
+   "ok": true,
+   "summary": "R2: 10행 × 6열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "제주시 권역 합계(사고건수·사상자·사망자)",
+    "steps": [
+     {
+      "column": "sidoSigungu",
+      "cmp": "contains",
+      "op": "filter",
+      "value": "제주시"
+     },
+     {
+      "op": "groupby",
+      "by": [],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "deathCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      }
+     }
+    ],
+    "table": "D1"
+   },
+   "ok": false,
+   "summary": "오류: 2단계(groupby): by에 묶을 열을 1개 이상 넣으세요(전체 합계는 describe 또는 derive/sum_of를 쓰세요)",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "서귀포시 권역 합계(사고건수·사상자·사망자)",
+    "steps": [
+     {
+      "column": "sidoSigungu",
+      "cmp": "contains",
+      "op": "filter",
+      "value": "서귀포시"
+     },
+     {
+      "op": "groupby",
+      "by": [],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "deathCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      }
+     }
+    ],
+    "table": "D1"
+   },
+   "ok": false,
+   "summary": "오류: 2단계(groupby): by에 묶을 열을 1개 이상 넣으세요(전체 합계는 describe 또는 derive/sum_of를 쓰세요)",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "제주시 권역 합계",
+    "steps": [
+     {
+      "column": "sidoSigungu",
+      "cmp": "contains",
+      "op": "filter",
+      "value": "제주시"
+     },
+     {
+      "name": "권역",
+      "left": "occurrenceCount",
+      "operator": "*",
+      "op": "derive",
+      "right": 0
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "권역"
+      ],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "deathCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      }
+     }
+    ],
+    "table": "D1"
+   },
+   "ok": true,
+   "summary": "R3: 1행 × 6열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "서귀포시 권역 합계",
+    "steps": [
+     {
+      "column": "sidoSigungu",
+      "cmp": "contains",
+      "op": "filter",
+      "value": "서귀포시"
+     },
+     {
+      "name": "권역",
+      "left": "occurrenceCount",
+      "operator": "*",
+      "op": "derive",
+      "right": 0
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "권역"
+      ],
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "deathCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      }
+     }
+    ],
+    "table": "D1"
+   },
+   "ok": true,
+   "summary": "R4: 1행 × 6열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "사고 건수 상위 6개 지점 + 중상자 많은 지점 확인",
+    "steps": [
+     {
+      "agg": {
+       "occurrenceCount": "sum",
+       "deathInjuryCount": "sum",
+       "deathCount": "sum",
+       "seriouslyInjuryCount": "sum",
+       "*": "count"
+      },
+      "by": [
+       "occurrencePlace"
+      ],
+      "op": "groupby"
+     },
+     {
+      "ascending": false,
+      "by": "occurrenceCount",
+      "op": "sort"
+     },
+     {
+      "n": 6,
+      "op": "head"
+     }
+    ],
+    "table": "D1"
+   },
+   "ok": true,
+   "summary": "R5: 6행 × 6열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "table": "R5",
+    "kind": "barh",
+    "x": "occurrencePlace",
+    "y": [
+     "occurrenceCount"
+    ],
+    "title": "제주 교통사고 다발지점 상위 6곳(발생 건수)"
+   },
+   "ok": true,
+   "summary": "차트 '제주 교통사고 다발지점 상위 6곳(발생 건수)'",
+   "seconds": 0.08
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "table": "R1",
+    "kind": "bar",
+    "x": "sidoSigungu",
+    "y": [
+     "occurrenceCount"
+    ],
+    "title": "구역(시군구 라벨)별 교통사고 발생 건수"
+   },
+   "ok": true,
+   "summary": "차트 '구역(시군구 라벨)별 교통사고 발생 건수'",
+   "seconds": 0.04
+  }
+ ],
+ "checks": [
+  {
+   "text": "140",
+   "value": 140.0,
+   "verified": true
+  },
+  {
+   "text": "119",
+   "value": 119.0,
+   "verified": true
+  },
+  {
+   "text": "48",
+   "value": 48.0,
+   "verified": true
+  },
+  {
+   "text": "140",
+   "value": 140.0,
+   "verified": true
+  },
+  {
+   "text": "214",
+   "value": 214.0,
+   "verified": true
+  },
+  {
+   "text": "46",
+   "value": 46.0,
+   "verified": true
+  },
+  {
+   "text": "119",
+   "value": 119.0,
+   "verified": true
+  },
+  {
+   "text": "143",
+   "value": 143.0,
+   "verified": true
+  },
+  {
+   "text": "28",
+   "value": 28.0,
+   "verified": true
+  },
+  {
+   "text": "48",
+   "value": 48.0,
+   "verified": true
+  },
+  {
+   "text": "62",
+   "value": 62.0,
+   "verified": true
+  },
+  {
+   "text": "17",
+   "value": 17.0,
+   "verified": true
+  },
+  {
+   "text": "47",
+   "value": 47.0,
+   "verified": true
+  },
+  {
+   "text": "68",
+   "value": 68.0,
+   "verified": true
+  },
+  {
+   "text": "34",
+   "value": 34.0,
+   "verified": true
+  },
+  {
+   "text": "74",
+   "value": 74.0,
+   "verified": true
+  },
+  {
+   "text": "33",
+   "value": 33.0,
+   "verified": true
+  },
+  {
+   "text": "39",
+   "value": 39.0,
+   "verified": true
+  },
+  {
+   "text": "21",
+   "value": 21.0,
+   "verified": true
+  },
+  {
+   "text": "611",
+   "value": 611.0,
+   "verified": true
+  },
+  {
+   "text": "851",
+   "value": 851.0,
+   "verified": true
+  },
+  {
+   "text": "108",
+   "value": 108.0,
+   "verified": true
+  },
+  {
+   "text": "21",
+   "value": 21.0,
+   "verified": true
+  },
+  {
+   "text": "475",
+   "value": 475.0,
+   "verified": true
+  },
+  {
+   "text": "674",
+   "value": 674.0,
+   "verified": true
+  },
+  {
+   "text": "149",
+   "value": 149.0,
+   "verified": true
+  },
+  {
+   "text": "149",
+   "value": 149.0,
+   "verified": true
+  }
+ ]
+}

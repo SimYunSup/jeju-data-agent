@@ -1,0 +1,528 @@
+{
+ "question": "제주 노지채소 중 재배 면적이 넓은 작물과 조수입은 어떻게 돼?",
+ "tables": {
+  "D1": {
+   "entry_id": "hub:981",
+   "title": "제주 채소류 재배 현황",
+   "source_url": "https://jejudatahub.net/data/view/data/981",
+   "method": "FILE",
+   "detail": {
+    "file": "제주채소류재배현황.csv"
+   },
+   "rows": 168,
+   "total_rows": null,
+   "loaded_at": "2026-11-10 15:52"
+  },
+  "R1": {
+   "entry_id": "hub:981",
+   "title": "제주 채소류 재배 현황",
+   "source_url": "https://jejudatahub.net/data/view/data/981",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "2020-21 시즌 제주 노지채소 작물별 재배면적·조수입 순위와 비중",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "채소구분대분류",
+      "cmp": "==",
+      "value": "노지채소"
+     },
+     {
+      "op": "filter",
+      "column": "연산",
+      "cmp": "==",
+      "value": "20-21"
+     },
+     {
+      "op": "sort",
+      "by": "면적(ha)",
+      "ascending": false
+     },
+     {
+      "op": "share",
+      "column": "면적(ha)",
+      "name": "면적비중(%)"
+     },
+     {
+      "op": "share",
+      "column": "조수입(백만원)",
+      "name": "조수입비중(%)"
+     }
+    ]
+   },
+   "rows": 19,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R2": {
+   "entry_id": "hub:981",
+   "title": "제주 채소류 재배 현황",
+   "source_url": "https://jejudatahub.net/data/view/data/981",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "노지채소 전체 면적·조수입 합계를 시즌별로 확인",
+    "steps": [
+     {
+      "column": "채소구분대분류",
+      "cmp": "==",
+      "op": "filter",
+      "value": "노지채소"
+     },
+     {
+      "by": [
+       "연산"
+      ],
+      "agg": {
+       "면적(ha)": "sum",
+       "조수입(백만원)": "sum"
+      },
+      "op": "groupby"
+     }
+    ]
+   },
+   "rows": 6,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R3": {
+   "entry_id": "hub:981",
+   "title": "제주 채소류 재배 현황",
+   "source_url": "https://jejudatahub.net/data/view/data/981",
+   "method": "DERIVED",
+   "detail": {
+    "from": "R1",
+    "purpose": "작물별 ha당 조수입 계산 및 조수입 순 정렬",
+    "steps": [
+     {
+      "name": "ha당조수입(백만원)",
+      "left": "조수입(백만원)",
+      "operator": "/",
+      "right": "면적(ha)",
+      "op": "derive"
+     },
+     {
+      "by": "조수입(백만원)",
+      "ascending": false,
+      "op": "sort"
+     }
+    ]
+   },
+   "rows": 19,
+   "total_rows": null,
+   "loaded_at": ""
+  }
+ },
+ "trace": [
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "제주 노지채소 재배면적 조수입"
+   },
+   "ok": true,
+   "summary": "'제주 노지채소 재배면적 조수입' → 제주 채소류 재배 현황, 시도별 노지 채소 재배 면적, 시도별 화훼 재배현황, 제주특별자치도 여객선 수송 통계(운임)",
+   "seconds": 0.09
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "노지채소 생산비 조수입 작목별"
+   },
+   "ok": true,
+   "summary": "'노지채소 생산비 조수입 작목별' → 제주 채소류 재배 현황, 시도별 노지 채소 재배 면적, 해양수산부 수산물품목별수출입현황, 제주 품종별 과수 생산량 통계",
+   "seconds": 0.0
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:981"
+   },
+   "ok": true,
+   "summary": "제주 채소류 재배 현황 (FILE, 2021-08-09~2021-08-09)",
+   "seconds": 0.05
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:854"
+   },
+   "ok": true,
+   "summary": "시도별 노지 채소 재배 면적 (FILE, 2000-01-01~2025-12-13)",
+   "seconds": 0.02
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:981",
+    "file_name": "제주채소류재배현황.csv"
+   },
+   "ok": true,
+   "summary": "D1: 제주 채소류 재배 현황 168행",
+   "seconds": 0.06
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "채소구분대분류",
+      "cmp": "==",
+      "value": "노지채소"
+     },
+     {
+      "op": "filter",
+      "column": "연산",
+      "cmp": "==",
+      "value": "20-21"
+     },
+     {
+      "op": "sort",
+      "by": "면적(ha)",
+      "ascending": false
+     },
+     {
+      "op": "share",
+      "column": "면적(ha)",
+      "name": "면적비중(%)"
+     },
+     {
+      "op": "share",
+      "column": "조수입(백만원)",
+      "name": "조수입비중(%)"
+     }
+    ],
+    "purpose": "2020-21 시즌 제주 노지채소 작물별 재배면적·조수입 순위와 비중"
+   },
+   "ok": true,
+   "summary": "R1: 19행 × 9열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "노지채소 전체 면적·조수입 합계를 시즌별로 확인",
+    "steps": [
+     {
+      "column": "채소구분대분류",
+      "cmp": "==",
+      "op": "filter",
+      "value": "노지채소"
+     },
+     {
+      "by": [
+       "연산"
+      ],
+      "agg": {
+       "면적(ha)": "sum",
+       "조수입(백만원)": "sum"
+      },
+      "op": "groupby"
+     }
+    ],
+    "table": "D1"
+   },
+   "ok": true,
+   "summary": "R2: 6행 × 3열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "table": "R1",
+    "kind": "barh",
+    "x": "채소구분소분류",
+    "y": [
+     "면적(ha)"
+    ],
+    "title": "2020-21 제주 노지채소 작물별 재배면적(ha) 상위"
+   },
+   "ok": true,
+   "summary": "차트 '2020-21 제주 노지채소 작물별 재배면적(ha) 상위'",
+   "seconds": 0.08
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "작물별 ha당 조수입 계산 및 조수입 순 정렬",
+    "steps": [
+     {
+      "name": "ha당조수입(백만원)",
+      "left": "조수입(백만원)",
+      "operator": "/",
+      "right": "면적(ha)",
+      "op": "derive"
+     },
+     {
+      "by": "조수입(백만원)",
+      "ascending": false,
+      "op": "sort"
+     }
+    ],
+    "table": "R1"
+   },
+   "ok": true,
+   "summary": "R3: 19행 × 10열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "kind": "barh",
+    "table": "R1",
+    "title": "2020-21 제주 노지채소 작물별 조수입(백만원)",
+    "x": "채소구분소분류",
+    "y": [
+     "조수입(백만원)"
+    ]
+   },
+   "ok": true,
+   "summary": "차트 '2020-21 제주 노지채소 작물별 조수입(백만원)'",
+   "seconds": 0.07
+  }
+ ],
+ "checks": [
+  {
+   "text": "19",
+   "value": 19.0,
+   "verified": true
+  },
+  {
+   "text": "19",
+   "value": 19.0,
+   "verified": true
+  },
+  {
+   "text": "5,056",
+   "value": 5056.0,
+   "verified": true
+  },
+  {
+   "text": "35.8%",
+   "value": 35.8,
+   "verified": true
+  },
+  {
+   "text": "1,753",
+   "value": 1753.0,
+   "verified": true
+  },
+  {
+   "text": "12.4%",
+   "value": 12.4,
+   "verified": true
+  },
+  {
+   "text": "1,600",
+   "value": 1600.0,
+   "verified": true
+  },
+  {
+   "text": "11.3%",
+   "value": 11.3,
+   "verified": true
+  },
+  {
+   "text": "1,385",
+   "value": 1385.0,
+   "verified": true
+  },
+  {
+   "text": "9.8%",
+   "value": 9.8,
+   "verified": true
+  },
+  {
+   "text": "1,357",
+   "value": 1357.0,
+   "verified": true
+  },
+  {
+   "text": "9.6%",
+   "value": 9.6,
+   "verified": true
+  },
+  {
+   "text": "14,105",
+   "value": 14105.0,
+   "verified": true
+  },
+  {
+   "text": "106,434",
+   "value": 106434.0,
+   "verified": true
+  },
+  {
+   "text": "22.6%",
+   "value": 22.6,
+   "verified": true
+  },
+  {
+   "text": "21.1",
+   "value": 21.1,
+   "verified": true
+  },
+  {
+   "text": "85,234",
+   "value": 85234.0,
+   "verified": true
+  },
+  {
+   "text": "18.1%",
+   "value": 18.1,
+   "verified": true
+  },
+  {
+   "text": "53.3",
+   "value": 53.3,
+   "verified": true
+  },
+  {
+   "text": "60,116",
+   "value": 60116.0,
+   "verified": true
+  },
+  {
+   "text": "12.7%",
+   "value": 12.7,
+   "verified": true
+  },
+  {
+   "text": "34.3",
+   "value": 34.3,
+   "verified": true
+  },
+  {
+   "text": "47,212",
+   "value": 47212.0,
+   "verified": true
+  },
+  {
+   "text": "10.0%",
+   "value": 10.0,
+   "verified": true
+  },
+  {
+   "text": "34.1",
+   "value": 34.1,
+   "verified": true
+  },
+  {
+   "text": "46,108",
+   "value": 46108.0,
+   "verified": true
+  },
+  {
+   "text": "9.8%",
+   "value": 9.8,
+   "verified": true
+  },
+  {
+   "text": "34.0",
+   "value": 34.0,
+   "verified": true
+  },
+  {
+   "text": "471,885",
+   "value": 471885.0,
+   "verified": true
+  },
+  {
+   "text": "95.4",
+   "value": 95.4,
+   "verified": true
+  },
+  {
+   "text": "63.7",
+   "value": 63.7,
+   "verified": true
+  },
+  {
+   "text": "62.2",
+   "value": 62.2,
+   "verified": true
+  },
+  {
+   "text": "53.3",
+   "value": 53.3,
+   "verified": true
+  },
+  {
+   "text": "52.8",
+   "value": 52.8,
+   "verified": true
+  },
+  {
+   "text": "22.6%",
+   "value": 22.6,
+   "verified": true
+  },
+  {
+   "text": "35.8%",
+   "value": 35.8,
+   "verified": true
+  },
+  {
+   "text": "22.6%",
+   "value": 22.6,
+   "verified": true
+  },
+  {
+   "text": "21.1",
+   "value": 21.1,
+   "verified": true
+  },
+  {
+   "text": "19",
+   "value": 19.0,
+   "verified": true
+  },
+  {
+   "text": "11.3%",
+   "value": 11.3,
+   "verified": true
+  },
+  {
+   "text": "18.1%",
+   "value": 18.1,
+   "verified": true
+  },
+  {
+   "text": "53.3",
+   "value": 53.3,
+   "verified": true
+  },
+  {
+   "text": "260",
+   "value": 260.0,
+   "verified": true
+  },
+  {
+   "text": "95.4",
+   "value": 95.4,
+   "verified": true
+  },
+  {
+   "text": "13,949",
+   "value": 13949.0,
+   "verified": true
+  },
+  {
+   "text": "14,105",
+   "value": 14105.0,
+   "verified": true
+  },
+  {
+   "text": "540,292",
+   "value": 540292.0,
+   "verified": true
+  },
+  {
+   "text": "471,885",
+   "value": 471885.0,
+   "verified": true
+  }
+ ]
+}

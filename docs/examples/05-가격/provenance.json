@@ -1,0 +1,731 @@
+{
+ "question": "요즘 깐마늘 도매 가격이 작년보다 올랐어?",
+ "tables": {
+  "D1": {
+   "entry_id": "hub:1361",
+   "title": "농산물 품종별 일일 거래 통계",
+   "source_url": "https://jejudatahub.net/data/view/data/1361",
+   "method": "API",
+   "detail": {
+    "params": {
+     "startDate": "20240101",
+     "endDate": "20251031",
+     "cultivar": "깐마늘"
+    }
+   },
+   "rows": 504,
+   "total_rows": 504,
+   "loaded_at": "2026-11-10 15:53"
+  },
+  "R1": {
+   "entry_id": "hub:1361",
+   "title": "농산물 품종별 일일 거래 통계",
+   "source_url": "https://jejudatahub.net/data/view/data/1361",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "깐마늘 월별 평균 도매가격 및 거래 규모 확인(2024 vs 2025)",
+    "steps": [
+     {
+      "op": "derive",
+      "name": "년",
+      "column": "baseDate",
+      "part": "year"
+     },
+     {
+      "op": "derive",
+      "name": "월",
+      "column": "baseDate",
+      "part": "month"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "년",
+       "월"
+      ],
+      "agg": {
+       "averagePrice": "mean",
+       "transactionVolume": "sum",
+       "transactionAmount": "sum",
+       "baseDate": "count"
+      }
+     },
+     {
+      "op": "rename",
+      "mapping": {
+       "averagePrice": "평균도매가격(원/kg)",
+       "transactionVolume": "거래량합계(톤)",
+       "transactionAmount": "거래금액합계(백만원)",
+       "baseDate": "거래일수"
+      }
+     }
+    ]
+   },
+   "rows": 22,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R2": {
+   "entry_id": "hub:1361",
+   "title": "농산물 품종별 일일 거래 통계",
+   "source_url": "https://jejudatahub.net/data/view/data/1361",
+   "method": "DERIVED",
+   "detail": {
+    "from": "R1",
+    "purpose": "2025년 1~10월 vs 2024년 동기 평균 도매가격 비교 및 증감률",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "월",
+      "cmp": "<=",
+      "value": 10
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "년"
+      ],
+      "agg": {
+       "평균도매가격(원/kg)": "mean",
+       "거래량합계(톤)": "sum",
+       "거래금액합계(백만원)": "sum"
+      }
+     },
+     {
+      "op": "pct_change",
+      "column": "평균도매가격(원/kg)",
+      "name": "전년대비증감률(%)"
+     }
+    ]
+   },
+   "rows": 2,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R3": {
+   "entry_id": "hub:1361",
+   "title": "농산물 품종별 일일 거래 통계",
+   "source_url": "https://jejudatahub.net/data/view/data/1361",
+   "method": "DERIVED",
+   "detail": {
+    "from": "R1",
+    "purpose": "2024년과 2025년 같은 달끼리 월별 가격 비교 및 차이·증감률",
+    "steps": [
+     {
+      "cmp": "in",
+      "column": "월",
+      "op": "filter",
+      "value": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10
+      ]
+     },
+     {
+      "columns": "년",
+      "index": "월",
+      "op": "pivot",
+      "values": "평균도매가격(원/kg)",
+      "agg": "mean"
+     },
+     {
+      "mapping": {
+       "2024": "2024년(원/kg)",
+       "2025": "2025년(원/kg)"
+      },
+      "op": "rename"
+     },
+     {
+      "left": "2025년(원/kg)",
+      "name": "차이(원/kg)",
+      "op": "derive",
+      "operator": "-",
+      "right": "2024년(원/kg)"
+     },
+     {
+      "left": "차이(원/kg)",
+      "name": "증감률(%)",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "2024년(원/kg)"
+     }
+    ]
+   },
+   "rows": 10,
+   "total_rows": null,
+   "loaded_at": ""
+  }
+ },
+ "trace": [
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "깐마늘 도매 가격"
+   },
+   "ok": true,
+   "summary": "'깐마늘 도매 가격' → 전국도매시장일별 경락가격 데이터, 제주 농산물 유통 가격 정보, 시도별 매매 가격 대비 전세 가격 비율, 제주 주유소 면세유 월평균 판매 가격 정보",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "농산물 도매 가격 마늘"
+   },
+   "ok": true,
+   "summary": "'농산물 도매 가격 마늘' → 제주 농산물 유통 가격 정보, 전국도매시장일별 경락가격 데이터, 농산물 품종별 일일 거래 통계, 농산물 품종별 일일 거래 정보",
+   "seconds": 0.0
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:1361"
+   },
+   "ok": true,
+   "summary": "농산물 품종별 일일 거래 통계 (API, 2016-01-04~2025-10-31)",
+   "seconds": 0.05
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:869"
+   },
+   "ok": true,
+   "summary": "전국도매시장일별 경락가격 데이터 (FILE, 2017-01-01~2021-08-18)",
+   "seconds": 0.03
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:1361",
+    "api_params": {
+     "startDate": "20240101",
+     "endDate": "20251031",
+     "cultivar": "깐마늘"
+    }
+   },
+   "ok": true,
+   "summary": "D1: 농산물 품종별 일일 거래 통계 504행",
+   "seconds": 0.43
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "steps": [
+     {
+      "op": "derive",
+      "name": "년",
+      "column": "baseDate",
+      "part": "year"
+     },
+     {
+      "op": "derive",
+      "name": "월",
+      "column": "baseDate",
+      "part": "month"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "년",
+       "월"
+      ],
+      "agg": {
+       "averagePrice": "mean",
+       "transactionVolume": "sum",
+       "transactionAmount": "sum",
+       "baseDate": "count"
+      }
+     },
+     {
+      "op": "rename",
+      "mapping": {
+       "averagePrice": "평균도매가격(원/kg)",
+       "transactionVolume": "거래량합계(톤)",
+       "transactionAmount": "거래금액합계(백만원)",
+       "baseDate": "거래일수"
+      }
+     }
+    ],
+    "purpose": "깐마늘 월별 평균 도매가격 및 거래 규모 확인(2024 vs 2025)"
+   },
+   "ok": true,
+   "summary": "R1: 22행 × 6열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "2025년 1~10월 vs 2024년 동기 평균 도매가격 비교 및 증감률",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "월",
+      "cmp": "<=",
+      "value": 10
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "년"
+      ],
+      "agg": {
+       "평균도매가격(원/kg)": "mean",
+       "거래량합계(톤)": "sum",
+       "거래금액합계(백만원)": "sum"
+      }
+     },
+     {
+      "op": "pct_change",
+      "column": "평균도매가격(원/kg)",
+      "name": "전년대비증감률(%)"
+     }
+    ],
+    "table": "R1"
+   },
+   "ok": true,
+   "summary": "R2: 2행 × 5열",
+   "seconds": 0.02
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "2024년과 2025년 같은 달끼리 월별 가격 비교 표 만들기",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "월",
+      "cmp": "<=",
+      "value": 10
+     },
+     {
+      "op": "pivot",
+      "index": "월",
+      "columns": "년",
+      "values": "평균도매가격(원/kg)",
+      "agg": "mean"
+     },
+     {
+      "op": "rename",
+      "mapping": {
+       "2024": "2024년(원/kg)",
+       "2025": "2025년(원/kg)"
+      }
+     },
+     {
+      "op": "derive",
+      "name": "증감률(%)",
+      "left": "2025년(원/kg)",
+      "operator": "-",
+      "right": "2024년(원/kg)",
+      "percent": true
+     }
+    ],
+    "table": "R1"
+   },
+   "ok": false,
+   "summary": "오류: 4단계(derive): '증감률(%)'은 비율 이름인데 '-' 연산입니다. 비율은 operator '/'와 percent:true, 증감률은 pct_change를 쓰고, 차이라면 이름을 '증감' 등으로 바꾸세요.",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "2024년과 2025년 같은 달끼리 월별 가격 비교 및 차이·증감률",
+    "steps": [
+     {
+      "cmp": "in",
+      "column": "월",
+      "op": "filter",
+      "value": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10
+      ]
+     },
+     {
+      "columns": "년",
+      "index": "월",
+      "op": "pivot",
+      "values": "평균도매가격(원/kg)",
+      "agg": "mean"
+     },
+     {
+      "mapping": {
+       "2024": "2024년(원/kg)",
+       "2025": "2025년(원/kg)"
+      },
+      "op": "rename"
+     },
+     {
+      "left": "2025년(원/kg)",
+      "name": "차이(원/kg)",
+      "op": "derive",
+      "operator": "-",
+      "right": "2024년(원/kg)"
+     },
+     {
+      "left": "차이(원/kg)",
+      "name": "증감률(%)",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "2024년(원/kg)"
+     }
+    ],
+    "table": "R1"
+   },
+   "ok": true,
+   "summary": "R3: 10행 × 5열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "table": "R3",
+    "kind": "bar",
+    "x": "월",
+    "y": [
+     "2024년(원/kg)",
+     "2025년(원/kg)"
+    ],
+    "title": "깐마늘 월별 평균 도매가격(원/kg) 2024 vs 2025"
+   },
+   "ok": true,
+   "summary": "차트 '깐마늘 월별 평균 도매가격(원/kg) 2024 vs 2025'",
+   "seconds": 0.05
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "table": "R3",
+    "kind": "bar",
+    "x": "월",
+    "y": [
+     "증감률(%)"
+    ],
+    "title": "작년 같은 달 대비 깐마늘 도매가격 증감률(%)"
+   },
+   "ok": true,
+   "summary": "차트 '작년 같은 달 대비 깐마늘 도매가격 증감률(%)'",
+   "seconds": 0.03
+  }
+ ],
+ "checks": [
+  {
+   "text": "14.8%",
+   "value": 14.8,
+   "verified": true
+  },
+  {
+   "text": "7,653.7",
+   "value": 7653.7,
+   "verified": true
+  },
+  {
+   "text": "6,664.4",
+   "value": 6664.4,
+   "verified": true
+  },
+  {
+   "text": "14.8%",
+   "value": 14.8,
+   "verified": true
+  },
+  {
+   "text": "5.6%",
+   "value": 5.6,
+   "verified": true
+  },
+  {
+   "text": "6,664.4",
+   "value": 6664.4,
+   "verified": true
+  },
+  {
+   "text": "58.01",
+   "value": 58.01,
+   "verified": true
+  },
+  {
+   "text": "7,653.7",
+   "value": 7653.7,
+   "verified": true
+  },
+  {
+   "text": "82.95",
+   "value": 82.95,
+   "verified": true
+  },
+  {
+   "text": "14.85%",
+   "value": 14.85,
+   "verified": true
+  },
+  {
+   "text": "6,901.2",
+   "value": 6901.2,
+   "verified": true
+  },
+  {
+   "text": "6,807.3",
+   "value": 6807.3,
+   "verified": true
+  },
+  {
+   "text": "-93.9",
+   "value": -93.9,
+   "verified": true
+  },
+  {
+   "text": "-1.4",
+   "value": -1.4,
+   "verified": true
+  },
+  {
+   "text": "6,790.4",
+   "value": 6790.4,
+   "verified": true
+  },
+  {
+   "text": "6,669.2",
+   "value": 6669.2,
+   "verified": true
+  },
+  {
+   "text": "-121.2",
+   "value": -121.2,
+   "verified": true
+  },
+  {
+   "text": "-1.8",
+   "value": -1.8,
+   "verified": true
+  },
+  {
+   "text": "6,654.2",
+   "value": 6654.2,
+   "verified": true
+  },
+  {
+   "text": "6,818.9",
+   "value": 6818.9,
+   "verified": true
+  },
+  {
+   "text": "164.7",
+   "value": 164.7,
+   "verified": true
+  },
+  {
+   "text": "2.5",
+   "value": 2.5,
+   "verified": true
+  },
+  {
+   "text": "6,660.6",
+   "value": 6660.6,
+   "verified": true
+  },
+  {
+   "text": "7,239.5",
+   "value": 7239.5,
+   "verified": true
+  },
+  {
+   "text": "578.9",
+   "value": 578.9,
+   "verified": true
+  },
+  {
+   "text": "8.7",
+   "value": 8.7,
+   "verified": true
+  },
+  {
+   "text": "6,453.7",
+   "value": 6453.7,
+   "verified": true
+  },
+  {
+   "text": "9,290.9",
+   "value": 9290.9,
+   "verified": true
+  },
+  {
+   "text": "2,837.2",
+   "value": 2837.2,
+   "verified": true
+  },
+  {
+   "text": "44.0",
+   "value": 44.0,
+   "verified": true
+  },
+  {
+   "text": "6,387.1",
+   "value": 6387.1,
+   "verified": true
+  },
+  {
+   "text": "9,329.9",
+   "value": 9329.9,
+   "verified": true
+  },
+  {
+   "text": "2,942.8",
+   "value": 2942.8,
+   "verified": true
+  },
+  {
+   "text": "46.1",
+   "value": 46.1,
+   "verified": true
+  },
+  {
+   "text": "6,337.9",
+   "value": 6337.9,
+   "verified": true
+  },
+  {
+   "text": "8,144.0",
+   "value": 8144.0,
+   "verified": true
+  },
+  {
+   "text": "1,806.1",
+   "value": 1806.1,
+   "verified": true
+  },
+  {
+   "text": "28.5",
+   "value": 28.5,
+   "verified": true
+  },
+  {
+   "text": "6,586.9",
+   "value": 6586.9,
+   "verified": true
+  },
+  {
+   "text": "7,429.7",
+   "value": 7429.7,
+   "verified": true
+  },
+  {
+   "text": "842.8",
+   "value": 842.8,
+   "verified": true
+  },
+  {
+   "text": "12.8",
+   "value": 12.8,
+   "verified": true
+  },
+  {
+   "text": "6,795.0",
+   "value": 6795.0,
+   "verified": true
+  },
+  {
+   "text": "7,334.0",
+   "value": 7334.0,
+   "verified": true
+  },
+  {
+   "text": "539.0",
+   "value": 539.0,
+   "verified": true
+  },
+  {
+   "text": "7.9",
+   "value": 7.9,
+   "verified": true
+  },
+  {
+   "text": "7,076.6",
+   "value": 7076.6,
+   "verified": true
+  },
+  {
+   "text": "7,473.9",
+   "value": 7473.9,
+   "verified": true
+  },
+  {
+   "text": "397.3",
+   "value": 397.3,
+   "verified": true
+  },
+  {
+   "text": "5.6",
+   "value": 5.6,
+   "verified": true
+  },
+  {
+   "text": "6,300",
+   "value": 6300.0,
+   "verified": true
+  },
+  {
+   "text": "6,500",
+   "value": 6500.0,
+   "verified": true
+  },
+  {
+   "text": "9,300",
+   "value": 9300.0,
+   "verified": true
+  },
+  {
+   "text": "44",
+   "value": 44.0,
+   "verified": true
+  },
+  {
+   "text": "46%",
+   "value": 46.0,
+   "verified": true
+  },
+  {
+   "text": "-1.4%",
+   "value": -1.4,
+   "verified": true
+  },
+  {
+   "text": "-1.8%",
+   "value": -1.8,
+   "verified": true
+  },
+  {
+   "text": "5.6%",
+   "value": 5.6,
+   "verified": true
+  },
+  {
+   "text": "58.0",
+   "value": 58.0,
+   "verified": true
+  },
+  {
+   "text": "83.0",
+   "value": 83.0,
+   "verified": true
+  }
+ ]
+}

@@ -1,0 +1,529 @@
+{
+ "question": "외국인 입도객은 어느 나라에서 가장 많이 와?",
+ "tables": {
+  "D1": {
+   "entry_id": "hub:582",
+   "title": "국가별 입도객 현황",
+   "source_url": "https://jejudatahub.net/data/view/data/582",
+   "method": "API",
+   "detail": {
+    "params": {
+     " startDate": "202108",
+     " endDate": "202507",
+     "startDate": "202108",
+     "endDate": "202507"
+    }
+   },
+   "rows": 576,
+   "total_rows": 576,
+   "loaded_at": "2026-11-10 15:52"
+  },
+  "R1": {
+   "entry_id": "hub:582",
+   "title": "국가별 입도객 현황",
+   "source_url": "https://jejudatahub.net/data/view/data/582",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "2021-08~2025-07 전체 기간 국가별 입도객 누적 순위와 비중",
+    "steps": [
+     {
+      "op": "groupby",
+      "by": [
+       "nationality"
+      ],
+      "agg": {
+       "visitorCnt": "sum"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "visitorCnt",
+      "ascending": false
+     },
+     {
+      "op": "share",
+      "column": "visitorCnt"
+     }
+    ]
+   },
+   "rows": 12,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R2": {
+   "entry_id": "hub:582",
+   "title": "국가별 입도객 현황",
+   "source_url": "https://jejudatahub.net/data/view/data/582",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "최근 12개월(2024-08~2025-07) 국가별 입도객 순위와 비중",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "dtYearMonth",
+      "cmp": ">=",
+      "value": "2024-08-01"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "nationality"
+      ],
+      "agg": {
+       "visitorCnt": "sum"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "visitorCnt",
+      "ascending": false
+     },
+     {
+      "op": "share",
+      "column": "visitorCnt"
+     }
+    ]
+   },
+   "rows": 12,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R3": {
+   "entry_id": "hub:582",
+   "title": "국가별 입도객 현황",
+   "source_url": "https://jejudatahub.net/data/view/data/582",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "월별 추이(상위 3개국)로 최근 흐름 확인",
+    "steps": [
+     {
+      "cmp": "in",
+      "column": "nationality",
+      "op": "filter",
+      "value": [
+       "중국",
+       "대만",
+       "일본"
+      ]
+     },
+     {
+      "op": "resample",
+      "date_column": "dtYearMonth",
+      "freq": "M",
+      "agg": {
+       "visitorCnt": "sum"
+      },
+      "by": [
+       "nationality"
+      ]
+     }
+    ]
+   },
+   "rows": 144,
+   "total_rows": null,
+   "loaded_at": ""
+  }
+ },
+ "trace": [
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "외국인 입도객 국가별"
+   },
+   "ok": true,
+   "summary": "'외국인 입도객 국가별' → 국가별 입도객 현황, 방문목적별 입도객 현황, 제주특별자치도_주제4_유동인구 데이터와 와이, 제주 방문관광객 실태 조사-거주지별 내국인 ",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "입도객 외국인 관광객"
+   },
+   "ok": true,
+   "summary": "'입도객 외국인 관광객' → 방문목적별 입도객 현황, 국가별 입도객 현황, 제주 방문관광객 실태 조사-거주지별 내국인 , 중국인 관광객 방한 시 방문 지역 통계",
+   "seconds": 0.01
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:582"
+   },
+   "ok": true,
+   "summary": "국가별 입도객 현황 (API, 2021-08-01~2025-07-31)",
+   "seconds": 0.05
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:582",
+    "api_params": {
+     "startDate": "202108",
+     "endDate": "202507"
+    }
+   },
+   "ok": false,
+   "summary": "오류: 필수 요청 변수 누락:  startDate,  endDate — inspect_dataset의 request_params를 보세요.",
+   "seconds": 0.0
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "api_params": {
+     " startDate": "202108",
+     " endDate": "202507"
+    },
+    "dataset_id": "hub:582"
+   },
+   "ok": false,
+   "summary": "오류: HTTP 400: 400 - \"{\\\"code\\\":400,\\\"status\\\":\\\"BAD_REQUEST\\\",\\\"message\\\":\\\"잘못된 파라미터 요청('startDate' or 'endDate')\\\"}\"",
+   "seconds": 0.05
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "api_params": {
+     "startDate": "20210801",
+     "endDate": "20250731"
+    },
+    "dataset_id": "hub:582"
+   },
+   "ok": false,
+   "summary": "오류: 필수 요청 변수 누락:  startDate,  endDate — inspect_dataset의 request_params를 보세요.",
+   "seconds": 0.0
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "api_params": {
+     " startDate": "202108",
+     " endDate": "202507",
+     "startDate": "202108",
+     "endDate": "202507"
+    },
+    "dataset_id": "hub:582"
+   },
+   "ok": true,
+   "summary": "D1: 국가별 입도객 현황 576행",
+   "seconds": 0.17
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "steps": [
+     {
+      "op": "groupby",
+      "by": [
+       "nationality"
+      ],
+      "agg": {
+       "visitorCnt": "sum"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "visitorCnt",
+      "ascending": false
+     },
+     {
+      "op": "share",
+      "column": "visitorCnt"
+     }
+    ],
+    "purpose": "2021-08~2025-07 전체 기간 국가별 입도객 누적 순위와 비중"
+   },
+   "ok": true,
+   "summary": "R1: 12행 × 3열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "dtYearMonth",
+      "cmp": ">=",
+      "value": "2024-08-01"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "nationality"
+      ],
+      "agg": {
+       "visitorCnt": "sum"
+      }
+     },
+     {
+      "op": "sort",
+      "by": "visitorCnt",
+      "ascending": false
+     },
+     {
+      "op": "share",
+      "column": "visitorCnt"
+     }
+    ],
+    "purpose": "최근 12개월(2024-08~2025-07) 국가별 입도객 순위와 비중"
+   },
+   "ok": true,
+   "summary": "R2: 12행 × 3열",
+   "seconds": 0.0
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "월별 추이(상위 3개국)로 최근 흐름 확인",
+    "steps": [
+     {
+      "cmp": "in",
+      "column": "nationality",
+      "op": "filter",
+      "value": [
+       "중국",
+       "대만",
+       "일본"
+      ]
+     },
+     {
+      "op": "resample",
+      "date_column": "dtYearMonth",
+      "freq": "M",
+      "agg": {
+       "visitorCnt": "sum"
+      },
+      "by": [
+       "nationality"
+      ]
+     }
+    ],
+    "table": "D1"
+   },
+   "ok": true,
+   "summary": "R3: 144행 × 3열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "table": "R2",
+    "kind": "barh",
+    "x": "nationality",
+    "title": "최근 1년(2024-08~2025-07) 국가별 입도객 수",
+    "y": [
+     "visitorCnt"
+    ]
+   },
+   "ok": true,
+   "summary": "차트 '최근 1년(2024-08~2025-07) 국가별 입도객 수'",
+   "seconds": 0.06
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "kind": "line",
+    "table": "R3",
+    "title": "월별 입도객 추이(중국·대만·일본)",
+    "x": "dtYearMonth",
+    "y": [
+     "visitorCnt"
+    ]
+   },
+   "ok": true,
+   "summary": "차트 '월별 입도객 추이(중국·대만·일본)'",
+   "seconds": 0.1
+  }
+ ],
+ "checks": [
+  {
+   "text": "1,496,045",
+   "value": 1496045.0,
+   "verified": true
+  },
+  {
+   "text": "72.0%",
+   "value": 72.0,
+   "verified": true
+  },
+  {
+   "text": "190,231",
+   "value": 190231.0,
+   "verified": true
+  },
+  {
+   "text": "9.2%",
+   "value": 9.2,
+   "verified": true
+  },
+  {
+   "text": "82,689",
+   "value": 82689.0,
+   "verified": true
+  },
+  {
+   "text": "4.0%",
+   "value": 4.0,
+   "verified": true
+  },
+  {
+   "text": "77,589",
+   "value": 77589.0,
+   "verified": true
+  },
+  {
+   "text": "3.7%",
+   "value": 3.7,
+   "verified": true
+  },
+  {
+   "text": "53,456",
+   "value": 53456.0,
+   "verified": true
+  },
+  {
+   "text": "2.6%",
+   "value": 2.6,
+   "verified": true
+  },
+  {
+   "text": "51,793",
+   "value": 51793.0,
+   "verified": true
+  },
+  {
+   "text": "2.5%",
+   "value": 2.5,
+   "verified": true
+  },
+  {
+   "text": "46,137",
+   "value": 46137.0,
+   "verified": true
+  },
+  {
+   "text": "2.2%",
+   "value": 2.2,
+   "verified": true
+  },
+  {
+   "text": "36,124",
+   "value": 36124.0,
+   "verified": true
+  },
+  {
+   "text": "1.7%",
+   "value": 1.7,
+   "verified": true
+  },
+  {
+   "text": "18,455",
+   "value": 18455.0,
+   "verified": true
+  },
+  {
+   "text": "0.9%",
+   "value": 0.9,
+   "verified": true
+  },
+  {
+   "text": "13,326",
+   "value": 13326.0,
+   "verified": true
+  },
+  {
+   "text": "0.6%",
+   "value": 0.6,
+   "verified": true
+  },
+  {
+   "text": "6,408",
+   "value": 6408.0,
+   "verified": true
+  },
+  {
+   "text": "0.3%",
+   "value": 0.3,
+   "verified": true
+  },
+  {
+   "text": "4,932",
+   "value": 4932.0,
+   "verified": true
+  },
+  {
+   "text": "0.2%",
+   "value": 0.2,
+   "verified": true
+  },
+  {
+   "text": "2,746,733",
+   "value": 2746733.0,
+   "verified": true
+  },
+  {
+   "text": "68.7%",
+   "value": 68.7,
+   "verified": true
+  },
+  {
+   "text": "349,688",
+   "value": 349688.0,
+   "verified": true
+  },
+  {
+   "text": "8.7%",
+   "value": 8.7,
+   "verified": true
+  },
+  {
+   "text": "179,043",
+   "value": 179043.0,
+   "verified": true
+  },
+  {
+   "text": "4.5%",
+   "value": 4.5,
+   "verified": true
+  },
+  {
+   "text": "172,667",
+   "value": 172667.0,
+   "verified": true
+  },
+  {
+   "text": "4.3%",
+   "value": 4.3,
+   "verified": true
+  },
+  {
+   "text": "121,743",
+   "value": 121743.0,
+   "verified": true
+  },
+  {
+   "text": "3.0%",
+   "value": 3.0,
+   "verified": true
+  },
+  {
+   "text": "72.0%",
+   "value": 72.0,
+   "verified": true
+  },
+  {
+   "text": "5만",
+   "value": 50000.0,
+   "verified": true
+  },
+  {
+   "text": "8만",
+   "value": 80000.0,
+   "verified": true
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+[client]
+toolbarMode = "viewer"
+
+[server]
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+primaryColor = "#F08A24"

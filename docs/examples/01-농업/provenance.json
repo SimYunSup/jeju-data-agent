@@ -1,0 +1,599 @@
+{
+ "question": "서귀포시 감귤 종류별로 생산량이 어떻게 변해왔어?",
+ "tables": {
+  "D1": {
+   "entry_id": "hub:1294",
+   "title": "서귀포시 감귤 종류별 면적 및 생산량 추이(연간)",
+   "source_url": "https://jejudatahub.net/data/view/data/1294",
+   "method": "FILE",
+   "detail": {
+    "file": "제주특별자치도 서귀포시_감귤 생산 정보_20240513.csv"
+   },
+   "rows": 495,
+   "total_rows": null,
+   "loaded_at": "2026-11-10 15:50"
+  },
+  "R1": {
+   "entry_id": "hub:1294",
+   "title": "서귀포시 감귤 종류별 면적 및 생산량 추이(연간)",
+   "source_url": "https://jejudatahub.net/data/view/data/1294",
+   "method": "DERIVED",
+   "detail": {
+    "from": "D1",
+    "purpose": "서귀포시 전체 감귤 종류별 연도별 생산량 합계 추이",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "구분",
+      "cmp": "==",
+      "value": "생산량"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "연도"
+      ],
+      "agg": {
+       "노지온주(극조생)": "sum",
+       "노지온주(조생)": "sum",
+       "노지온주(보통)": "sum",
+       "하우스감귤(조기출하)": "sum",
+       "비가림(월동)감귤": "sum",
+       "만감류(시설)": "sum",
+       "만감류(노지)": "sum",
+       "읍면동": "nunique"
+      }
+     },
+     {
+      "op": "rename",
+      "mapping": {
+       "읍면동": "읍면동수"
+      }
+     }
+    ]
+   },
+   "rows": 11,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R2": {
+   "entry_id": "hub:1294",
+   "title": "서귀포시 감귤 종류별 면적 및 생산량 추이(연간)",
+   "source_url": "https://jejudatahub.net/data/view/data/1294",
+   "method": "DERIVED",
+   "detail": {
+    "from": "R1",
+    "purpose": "종류별 2012년 대비 2022년 생산량 증감률(10년)",
+    "steps": [
+     {
+      "column": "노지온주(극조생)",
+      "name": "극조생_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "노지온주(조생)",
+      "name": "조생_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "노지온주(보통)",
+      "name": "보통_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "하우스감귤(조기출하)",
+      "name": "하우스_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "비가림(월동)감귤",
+      "name": "비가림_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "만감류(시설)",
+      "name": "만감시설_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "만감류(노지)",
+      "name": "만감노지_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "op": "filter",
+      "column": "연도",
+      "cmp": "==",
+      "value": 2022
+     }
+    ]
+   },
+   "rows": 1,
+   "total_rows": null,
+   "loaded_at": ""
+  },
+  "R3": {
+   "entry_id": "hub:1294",
+   "title": "서귀포시 감귤 종류별 면적 및 생산량 추이(연간)",
+   "source_url": "https://jejudatahub.net/data/view/data/1294",
+   "method": "DERIVED",
+   "detail": {
+    "from": "R1",
+    "purpose": "연도별 전체 생산량과 종류별 비중 변화",
+    "steps": [
+     {
+      "name": "합계",
+      "op": "derive",
+      "sum_of": [
+       "노지온주(극조생)",
+       "노지온주(조생)",
+       "노지온주(보통)",
+       "하우스감귤(조기출하)",
+       "비가림(월동)감귤",
+       "만감류(시설)",
+       "만감류(노지)"
+      ]
+     },
+     {
+      "left": "노지온주(조생)",
+      "name": "조생비중",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "합계"
+     },
+     {
+      "left": "만감류(시설)",
+      "name": "만감시설비중",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "합계"
+     },
+     {
+      "left": "노지온주(극조생)",
+      "name": "극조생비중",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "합계"
+     },
+     {
+      "left": "비가림(월동)감귤",
+      "name": "비가림비중",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "합계"
+     },
+     {
+      "op": "select",
+      "columns": [
+       "연도",
+       "합계",
+       "조생비중",
+       "극조생비중",
+       "비가림비중",
+       "만감시설비중"
+      ]
+     }
+    ]
+   },
+   "rows": 11,
+   "total_rows": null,
+   "loaded_at": ""
+  }
+ },
+ "trace": [
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "감귤 생산량"
+   },
+   "ok": true,
+   "summary": "'감귤 생산량' → 서귀포시 감귤 종류별 면적 및 생산량 추이(, 제주 품종별 과수 생산량 통계, 시도별 미곡생산량(백미) 정보, 시도별 1일 평균 식용 계란 생산량 통계",
+   "seconds": 0.0
+  },
+  {
+   "tool": "search_datasets",
+   "args": {
+    "query": "서귀포 감귤 품종별 생산"
+   },
+   "ok": true,
+   "summary": "'서귀포 감귤 품종별 생산' → 서귀포시 감귤 종류별 면적 및 생산량 추이(, 제주 품종별 과수 생산량 통계, 농산물 품종별 일일 거래 통계, 농산물 품종별 일일 거래 정보",
+   "seconds": 0.0
+  },
+  {
+   "tool": "inspect_dataset",
+   "args": {
+    "dataset_id": "hub:1294"
+   },
+   "ok": true,
+   "summary": "서귀포시 감귤 종류별 면적 및 생산량 추이(연간) (FILE, 2012-01-01~2024-12-31)",
+   "seconds": 0.09
+  },
+  {
+   "tool": "load_dataset",
+   "args": {
+    "dataset_id": "hub:1294",
+    "file_name": "제주특별자치도 서귀포시_감귤 생산 정보_20240513.csv"
+   },
+   "ok": true,
+   "summary": "D1: 서귀포시 감귤 종류별 면적 및 생산량 추이(연간) 495행",
+   "seconds": 0.07
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "table": "D1",
+    "steps": [
+     {
+      "op": "filter",
+      "column": "구분",
+      "cmp": "==",
+      "value": "생산량"
+     },
+     {
+      "op": "groupby",
+      "by": [
+       "연도"
+      ],
+      "agg": {
+       "노지온주(극조생)": "sum",
+       "노지온주(조생)": "sum",
+       "노지온주(보통)": "sum",
+       "하우스감귤(조기출하)": "sum",
+       "비가림(월동)감귤": "sum",
+       "만감류(시설)": "sum",
+       "만감류(노지)": "sum",
+       "읍면동": "nunique"
+      }
+     },
+     {
+      "op": "rename",
+      "mapping": {
+       "읍면동": "읍면동수"
+      }
+     }
+    ],
+    "purpose": "서귀포시 전체 감귤 종류별 연도별 생산량 합계 추이"
+   },
+   "ok": true,
+   "summary": "R1: 11행 × 9열",
+   "seconds": 0.02
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "종류별 2012년 대비 2022년 생산량 증감률(10년)",
+    "steps": [
+     {
+      "column": "노지온주(극조생)",
+      "name": "극조생_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "노지온주(조생)",
+      "name": "조생_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "노지온주(보통)",
+      "name": "보통_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "하우스감귤(조기출하)",
+      "name": "하우스_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "비가림(월동)감귤",
+      "name": "비가림_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "만감류(시설)",
+      "name": "만감시설_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "column": "만감류(노지)",
+      "name": "만감노지_증감률",
+      "op": "pct_change",
+      "periods": 10
+     },
+     {
+      "op": "filter",
+      "column": "연도",
+      "cmp": "==",
+      "value": 2022
+     }
+    ],
+    "table": "R1"
+   },
+   "ok": true,
+   "summary": "R2: 1행 × 16열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "analyze",
+   "args": {
+    "purpose": "연도별 전체 생산량과 종류별 비중 변화",
+    "steps": [
+     {
+      "name": "합계",
+      "op": "derive",
+      "sum_of": [
+       "노지온주(극조생)",
+       "노지온주(조생)",
+       "노지온주(보통)",
+       "하우스감귤(조기출하)",
+       "비가림(월동)감귤",
+       "만감류(시설)",
+       "만감류(노지)"
+      ]
+     },
+     {
+      "left": "노지온주(조생)",
+      "name": "조생비중",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "합계"
+     },
+     {
+      "left": "만감류(시설)",
+      "name": "만감시설비중",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "합계"
+     },
+     {
+      "left": "노지온주(극조생)",
+      "name": "극조생비중",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "합계"
+     },
+     {
+      "left": "비가림(월동)감귤",
+      "name": "비가림비중",
+      "op": "derive",
+      "operator": "/",
+      "percent": true,
+      "right": "합계"
+     },
+     {
+      "op": "select",
+      "columns": [
+       "연도",
+       "합계",
+       "조생비중",
+       "극조생비중",
+       "비가림비중",
+       "만감시설비중"
+      ]
+     }
+    ],
+    "table": "R1"
+   },
+   "ok": true,
+   "summary": "R3: 11행 × 6열",
+   "seconds": 0.01
+  },
+  {
+   "tool": "make_chart",
+   "args": {
+    "table": "R1",
+    "kind": "line",
+    "x": "연도",
+    "y": [
+     "노지온주(조생)",
+     "만감류(시설)",
+     "노지온주(극조생)",
+     "하우스감귤(조기출하)",
+     "비가림(월동)감귤",
+     "노지온주(보통)",
+     "만감류(노지)"
+    ],
+    "title": "서귀포시 감귤 종류별 생산량 추이(2012~2022)"
+   },
+   "ok": true,
+   "summary": "차트 '서귀포시 감귤 종류별 생산량 추이(2012~2022)'",
+   "seconds": 0.14
+  }
+ ],
+ "checks": [
+  {
+   "text": "45만6,365",
+   "value": 456365.0,
+   "verified": true
+  },
+  {
+   "text": "40만4,233",
+   "value": 404233.0,
+   "verified": true
+  },
+  {
+   "text": "38만8,169",
+   "value": 388169.0,
+   "verified": true
+  },
+  {
+   "text": "47만7,385",
+   "value": 477385.0,
+   "verified": true
+  },
+  {
+   "text": "40만4,233",
+   "value": 404233.0,
+   "verified": true
+  },
+  {
+   "text": "4만4,647",
+   "value": 44647.0,
+   "verified": true
+  },
+  {
+   "text": "25%",
+   "value": 25.0,
+   "verified": true
+  },
+  {
+   "text": "65%",
+   "value": 65.0,
+   "verified": true
+  },
+  {
+   "text": "11%",
+   "value": 11.0,
+   "verified": true
+  },
+  {
+   "text": "331,925",
+   "value": 331925.0,
+   "verified": true
+  },
+  {
+   "text": "249,337.61",
+   "value": 249337.61,
+   "verified": true
+  },
+  {
+   "text": "-24.9%",
+   "value": -24.9,
+   "verified": true
+  },
+  {
+   "text": "44,647",
+   "value": 44647.0,
+   "verified": true
+  },
+  {
+   "text": "73,789.54",
+   "value": 73789.54,
+   "verified": true
+  },
+  {
+   "text": "65.3%",
+   "value": 65.3,
+   "verified": true
+  },
+  {
+   "text": "20,363",
+   "value": 20363.0,
+   "verified": true
+  },
+  {
+   "text": "33,968.52",
+   "value": 33968.52,
+   "verified": true
+  },
+  {
+   "text": "66.8%",
+   "value": 66.8,
+   "verified": true
+  },
+  {
+   "text": "19,273",
+   "value": 19273.0,
+   "verified": true
+  },
+  {
+   "text": "24,724.7",
+   "value": 24724.7,
+   "verified": true
+  },
+  {
+   "text": "28.3%",
+   "value": 28.3,
+   "verified": true
+  },
+  {
+   "text": "26,911",
+   "value": 26911.0,
+   "verified": true
+  },
+  {
+   "text": "17,880.02",
+   "value": 17880.02,
+   "verified": true
+  },
+  {
+   "text": "-33.6%",
+   "value": -33.6,
+   "verified": true
+  },
+  {
+   "text": "1,489",
+   "value": 1489.0,
+   "verified": true
+  },
+  {
+   "text": "2,654.82",
+   "value": 2654.82,
+   "verified": true
+  },
+  {
+   "text": "78.3%",
+   "value": 78.3,
+   "verified": true
+  },
+  {
+   "text": "11,757",
+   "value": 11757.0,
+   "verified": true
+  },
+  {
+   "text": "1,878.16",
+   "value": 1878.16,
+   "verified": true
+  },
+  {
+   "text": "-84.0%",
+   "value": -84.0,
+   "verified": true
+  },
+  {
+   "text": "72.7%",
+   "value": 72.7,
+   "verified": true
+  },
+  {
+   "text": "61.7%",
+   "value": 61.7,
+   "verified": true
+  },
+  {
+   "text": "9.8%",
+   "value": 9.8,
+   "verified": true
+  },
+  {
+   "text": "18.3%",
+   "value": 18.3,
+   "verified": true
+  },
+  {
+   "text": "-84%",
+   "value": -84.0,
+   "verified": true
+  }
+ ]
+}
